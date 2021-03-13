@@ -23,8 +23,11 @@ export default class PassportConfig {
               usernameField: "email",
               passwordField: "password",
             },
-            (email, password, done) => {
-              const user = auth_service.getUserByEmailAndPassword(email, password);
+            async (email, password, done) => {
+
+                console.log('inside passportconfig');
+                
+              const user = await auth_service.getUserByEmailAndPassword(email, password);
               return user
                 ? done(null, user)
                 : done(null, false, {
@@ -46,7 +49,7 @@ export default class PassportConfig {
             }
           });
 
-          this._strategy.use(this._strategy)
+          this._passport.use(this._strategy);
     }
 
     
