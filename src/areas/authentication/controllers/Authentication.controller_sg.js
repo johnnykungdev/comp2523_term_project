@@ -1,14 +1,18 @@
 import express from "express";
 import IController from "../../../interfaces/controller.interface";
 import { IAuthenticationService } from "../services";
-import passport from "passport";
+import PassportConfig from "../config/PassportConfig";
 
 
 class AuthenticationController implements IController {
   public path = "/auth";
   public router = express.Router();
 
+
+  private _ppConfig: PassportConfig;
+
   constructor(service: IAuthenticationService) {
+    this._ppConfig = new PassportConfig(service);
     this.initializeRoutes();
   }
 
@@ -17,6 +21,11 @@ class AuthenticationController implements IController {
     this.router.post(`${this.path}/register`, this.registration);
     this.router.get(`${this.path}/login`, this.showLoginPage);
     this.router.post(`${this.path}/login`, this.login);
+    // this.router.post(`${this.path}/login`, this._ppConfig.passport.authenticate("local", {
+    //   successRedirect: "/posts",
+    //   failureRedirect: "/auth/login",
+    // }));
+
     this.router.get(`${this.path}/logout`, this.logout);
   }
 
@@ -30,7 +39,7 @@ class AuthenticationController implements IController {
 
   // 🔑 These Authentication methods needs to be implemented by you
   private login = (req: express.Request, res: express.Response) => {    
-    passport.authenticate("local", (_,user) => {
+    this._ppConfig.passport.authenticate("local", (_,user) => {
         // user send by serialize.
         req.login(user, (err) => {
           if(err) {
