@@ -19,7 +19,13 @@ export class MockAuthenticationService implements IAuthenticationService {
     return user;
   }
 
-  public async createUser(user: any): Promise<IUser> {
-    throw new Error("Method not implemented");
+  public async createUser(form_obj): Promise<IUser> {
+
+    if (DbHelper.select([{ username: form_obj.username }])[0] || DbHelper.select([{ email: form_obj.email }])[0]) {
+      throw new Error("User already exist");
+    }
+    else {
+      return DbHelper.createUser(form_obj);
+    }
   }
 }

@@ -11,9 +11,18 @@ class PostController implements IController {
     this.initializeRoutes();
   }
 
+  private ensureAuthenticated = function (req: Request, res: Response, next: NextFunction) {
+    if (typeof req.user == "undefined") {
+        res.redirect("/auth/login");
+    }
+    else {
+      return next();
+    }
+  };
+
   private initializeRoutes() {
-    this.router.get(this.path, this.getAllPosts);
-    this.router.get(`${this.path}/:id`, this.getPostById);
+    this.router.get(this.path, this.ensureAuthenticated, this.getAllPosts);
+    this.router.get(`${this.path}/:id`,this.ensureAuthenticated, this.getPostById);
     this.router.get(`${this.path}/:id/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}`, this.createPost);
