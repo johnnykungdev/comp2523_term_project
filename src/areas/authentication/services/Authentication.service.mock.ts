@@ -2,38 +2,21 @@ import { database } from "../../../model/fakeDB";
 import IUser from "../../../interfaces/user.interface";
 import { IAuthenticationService } from "./IAuthentication.service";
 import { resolve } from "path";
+import { DbHelper } from "../../../helpers/DbHelper";
 
 export class MockAuthenticationService implements IAuthenticationService {
   readonly _db = database;
 
   public async getUserByEmailAndPassword(email: string, password: string): Promise<IUser> {
+    let user = DbHelper.select([{ email: email }, { password: password }])[0];
 
-    let data = {
-      id: '1',
-      username: 'billgates',
-      email: 'gates@gmail.com',
-      password: 'gates123',
-      firstName: 'Bill',
-      lastName: 'Gates',
-    }
-
-    return data;
-
+    return user;
   }
 
   public async findUserByEmail(email: String): Promise<null | IUser> {
+    let user = DbHelper.select([{ email: email }])[0];
 
-    let data = {
-      id: '1',
-      username: 'billgates',
-      email: 'gates@gmail.com',
-      password: 'gates123',
-      firstName: 'Bill',
-      lastName: 'Gates',
-    }
-
-    return data;
-    // throw new Error("Method not implemented");
+    return user;
   }
 
   public async createUser(user: any): Promise<IUser> {

@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import session from "express-session";
 import morgan from "morgan";
+import flash from "connect-flash";
 
 module.exports = (app) => {
   // Static File Serving and Post Body Parsing
@@ -26,4 +27,6 @@ module.exports = (app) => {
       },
     })
   );
+
+  app.use(flash());
 };
