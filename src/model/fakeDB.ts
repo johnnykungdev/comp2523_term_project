@@ -76,7 +76,7 @@ let database: IDatabase = {
           ],
         },
       ],
-      following: ["james123"],
+      following: [],
       reposts: [],
     },
   ],
