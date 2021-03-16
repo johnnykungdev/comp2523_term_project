@@ -241,6 +241,7 @@
           </div>
           
         <!-- Post begins -->
+        <% if(posts.length > 0) { %>
         <% posts.forEach(post => { %>
         <div class="flex bg-gray-100 mb-4 rounded-lg">
           <div class="w-1/8 text-right pl-3 pt-3">
@@ -309,6 +310,7 @@
           </div>
         </div>
         <% }) %>
+        <% } %>
         <!-- Post ends -->
       </div>
     </div>

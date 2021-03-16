@@ -30,14 +30,19 @@ class AuthenticationController implements IController {
   }
 
   private showLoginPage = (req: express.Request, res: express.Response) => {
+    let messages: string[] = [];
     let err_msg = req.flash("error");
     let reg_success_msg = req.flash("info");
 
-    console.log("reg success");
+    console.log(`err msg ${err_msg} length ${err_msg.length}`);
 
-    console.log(reg_success_msg);
+    if (err_msg.length > 0) {
+      messages = err_msg;
+    } else if (reg_success_msg.length > 0) {
+      messages = reg_success_msg;
+    }
 
-    res.render("authentication/views/login", { message: err_msg, reg_success_msg });
+    res.render("authentication/views/login", { messages: messages });
   };
 
   private showRegistrationPage = (_: express.Request, res: express.Response) => {
@@ -52,14 +57,13 @@ class AuthenticationController implements IController {
     })(req, res, next);
   };
   private registration = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user = this._auth_service.createUser(req.body);
     // need some more form validation here, like for pw
-    console.log("user user");
-    console.log(user);
+
+    const user = await this._auth_service.createUser(req.body);
 
     // if (user) {
     // put message here
-    req.flash("info", "Signup success");
+    req.flash("info", `Sucessful signup, ${user[0].username}. Please login now`);
     res.redirect("/auth/login");
     // }
   };

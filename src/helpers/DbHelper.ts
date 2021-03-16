@@ -18,25 +18,13 @@ export class DbHelper {
   }
 
   static createUser(form_obj) {
-    // database.users.push(
-    //   {
-    //     id: uuidv4(),
-    //     email: form_obj.email,
-    //     password: form_obj.password,
-    //     firstName: form_obj.firstName,
-    //     lastName: form_obj.lastName,
-    //     username: form_obj.username,
-    //     posts: [],
-    //   }
-    // )
-
     database.users.push({
-      id: "uuidv4()",
-      email: "form_obj.email",
-      password: "form_obj.password",
-      firstName: "form_obj.firstName",
-      lastName: "form_obj.lastName",
-      username: "form_obj.username",
+      id: uuidv4(),
+      email: form_obj.email,
+      password: form_obj.password,
+      firstName: form_obj.firstName,
+      lastName: form_obj.lastName,
+      username: form_obj.username,
       posts: [],
     });
 
