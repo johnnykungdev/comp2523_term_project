@@ -1,5 +1,4 @@
 import { database } from "../fakeDB";
-import { v4 as uuidv4 } from "uuid";
 
 export class UserHelper {
   private static _reducer(state, condition) {

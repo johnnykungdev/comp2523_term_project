@@ -4,9 +4,8 @@ import IPostService from "./IPostService";
 
 // ⭐️ Feel free to change this class in any way you like. It is simply an example...
 export class MockPostService implements IPostService {
-  addPost(post: IPost, username: string): void {
-    // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+  addPost(post: IPost): void {
+    PostHelper.addPost(post);
   }
   getAllPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
