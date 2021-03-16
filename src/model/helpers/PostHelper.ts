@@ -1,7 +1,6 @@
 import IPost from "../../interfaces/post.interface";
 import { database } from "../fakeDB";
 import { UserHelper } from "./UserHelper";
-import { v4 as uuidv4 } from "uuid";
 
 export class PostHelper {
   private static _user;
@@ -19,6 +18,12 @@ export class PostHelper {
   static getAllPosts(username): IPost[] {
     this._user = UserHelper.select([{ username: username }]);
     const ownposts = this.getOwnPosts();
+    ownposts.sort((a, b) => {
+      var dateA = new Date(a.createdAt);
+      var dateB = new Date(b.createdAt);
+      return dateB - dateA;
+    });
+
     return ownposts;
   }
 
