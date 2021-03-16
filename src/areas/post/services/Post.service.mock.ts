@@ -1,3 +1,4 @@
+import { PostHelper } from "../../../model/helpers/PostHelper";
 import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 
@@ -9,7 +10,7 @@ export class MockPostService implements IPostService {
   }
   getAllPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+    return PostHelper.getAllPosts(username);
   }
   findById(id: string): IPost {
     // 🚀 Implement this yourself.

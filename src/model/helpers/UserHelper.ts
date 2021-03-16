@@ -1,7 +1,7 @@
-import { database } from "../model/fakeDB";
+import { database } from "../fakeDB";
 import { v4 as uuidv4 } from "uuid";
 
-export class DbHelper {
+export class UserHelper {
   private static _reducer(state, condition) {
     state = state.filter((user) => {
       if (user[Object.keys(condition)[0]] == Object.values(condition)[0]) {

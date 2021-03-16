@@ -15,8 +15,8 @@ module.exports = (app) => {
     done(null, localLogin.user.email);
   });
 
-  passport.deserializeUser(function (email, done) {
-    let user = localLogin.auth_service.findUserByEmail(localLogin.user.email);
+  passport.deserializeUser(async (email, done) => {
+    let user = await localLogin.auth_service.findUserByEmail(localLogin.user.email);
     if (user) {
       done(null, user);
     } else {

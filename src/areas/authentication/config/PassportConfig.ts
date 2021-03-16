@@ -22,6 +22,7 @@ export default class PassportConfig {
       },
       async (email, password, done) => {
         this._user = await auth_service.getUserByEmailAndPassword(email, password);
+
         return this._user
           ? done(null, this._user)
           : done(null, false, {
