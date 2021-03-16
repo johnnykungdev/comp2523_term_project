@@ -15,6 +15,35 @@
     <section class="h-screen w-screen bg-gray-200 flex flex-col-reverse sm:flex-row min-h-0 min-w-0 overflow-hidden">
       <main class="sm:h-full flex-1 flex flex-col min-h-0 min-w-0 overflow-auto">
         <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-34">
+          <!-- Desktop search box -->
+          <div class="items-center hidden px-2 space-x-2 md:flex-1 md:flex md:mr-auto md:ml-5">
+            <!-- search icon -->
+            <span>
+              <svg
+                class="w-5 h-5 text-gray-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </span>
+            <form action="/search">
+              <input
+                type="text"
+                name="query"
+                placeholder="Search"
+                class="px-4 py-3 rounded-md hover:bg-gray-100 lg:max-w-sm md:py-2 md:flex-1 focus:outline-none md:focus:bg-gray-100 md:focus:shadow md:focus:border"
+              />
+              <button hidden type="submit"></button>
+            </form>
+          </div>
           <div class="flex flex-wrap text-center justify-center">
             <div class="w-full lg:w-6/12 px-4">
               <h2 class="text-4xl font-semibold text-black">Users</h2>
@@ -24,46 +53,30 @@
             </div>
           </div>
           <div class="flex flex-wrap mt-12 justify-center">
-            <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1">
-                <img
-                  alt="..."
-                  src="https://sewausa.org/resources/Sewa%20USA%20Images/Projects/Sewa%20Aspire/Volunteer%20list/9.png"
-                  class="h-24 w-24 rounded mx-auto"
-                />
+            <div class="flex-c">
+              <% userList.forEach(function(user) { %>
+              <div class="found_user flex mb-5">
+                <div class="col-span-2 sm:col-span-1 xl:col-span-1">
+                  <img
+                    alt="..."
+                    src="https://sewausa.org/resources/Sewa%20USA%20Images/Projects/Sewa%20Aspire/Volunteer%20list/9.png"
+                    class="h-24 w-24 rounded mx-auto"
+                  />
+                </div>
+                <div class="col-span-2 sm:col-span-4 xl:col-span-4">
+                  <p><%= user.username %></p>
+                </div>
+                <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
+                  <button
+                    class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                    type="button"
+                    style="transition: all 0.15s ease"
+                  >
+                    <i class="fa fa-heart mr-2"></i> Following
+                  </button>
+                </div>
               </div>
-              <div class="col-span-2 sm:col-span-4 xl:col-span-4">
-                <p>John Doe</p>
-              </div>
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
-                <button
-                  class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                  type="button"
-                  style="transition: all 0.15s ease"
-                >
-                  <i class="fa fa-heart mr-2"></i> Following
-                </button>
-              </div>
-
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1">
-                <img
-                  alt="..."
-                  src="https://sewausa.org/resources/Sewa%20USA%20Images/Projects/Sewa%20Aspire/Volunteer%20list/9.png"
-                  class="h-24 w-24 rounded mx-auto"
-                />
-              </div>
-              <div class="col-span-2 sm:col-span-4 xl:col-span-4">
-                <p>John Smith</p>
-              </div>
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
-                <button
-                  class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                  type="button"
-                  style="transition: all 0.15s ease"
-                >
-                  <i class="fa fa-heart-o mr-2"></i>Follow
-                </button>
-              </div>
+              <% }); %>
             </div>
           </div>
         </div>
@@ -78,34 +91,24 @@
             </div>
           </div>
           <div class="flex flex-wrap mt-12 justify-center">
-            <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
-              <div class="col-span-4 sm:col-span-5 xl:col-span-5">
-                <h3 class="font-semibold text-black">Bill Gates</h3>
-                <p>This is a first example of a post</p>
+            <div class="flex-c">
+              <% postList.forEach(function(post) { %>
+              <div class="found_post flex mb-5">
+                <div class="col-span-4 sm:col-span-5 xl:col-span-5">
+                  <h3 class="font-semibold text-black"><%= post.username %></h3>
+                  <p><%= post.message %></p>
+                </div>
+                <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
+                  <button
+                    class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                    type="button"
+                    style="transition: all 0.15s ease"
+                  >
+                    <i class="fa fa-arrow-right"></i>
+                  </button>
+                </div>
               </div>
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
-                <button
-                  class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                  type="button"
-                  style="transition: all 0.15s ease"
-                >
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
-
-              <div class="col-span-4 sm:col-span-5 xl:col-span-5">
-                <h3 class="font-semibold text-black">Steve Jobs</h3>
-                <p>This is a second example of a post</p>
-              </div>
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
-                <button
-                  class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                  type="button"
-                  style="transition: all 0.15s ease"
-                >
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
+              <% }); %>
             </div>
           </div>
         </div>

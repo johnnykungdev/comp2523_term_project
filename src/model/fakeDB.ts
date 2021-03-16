@@ -14,7 +14,7 @@ let database: IDatabase = {
       posts: [
         {
           id: "abc1",
-          userId: "billgates",
+          username: "billgates",
           message: "Microsoft is a nice company",
           createdAt: new Date(),
           likes: 3,
@@ -24,7 +24,7 @@ let database: IDatabase = {
             {
               id: "abc2",
               createdAt: "2012-01-09T11:25:13Z",
-              userId: "billgates",
+              username: "billgates",
               message: "this is some random comment",
             },
           ],
@@ -43,7 +43,7 @@ let database: IDatabase = {
       posts: [
         {
           id: "abc3",
-          userId: "james123",
+          username: "james123",
           message: "A post by james",
           createdAt: new Date(),
           likes: 30,
@@ -53,14 +53,14 @@ let database: IDatabase = {
             {
               id: "abc4",
               createdAt: "2012-01-05T04:13:24Z",
-              userId: "billgates",
+              username: "billgates",
               message: "Cool post james. Glad I decided to follow you.",
             },
           ],
         },
         {
           id: "abc5",
-          userId: "james123",
+          username: "james123",
           message: "Nice weather today in Vancouver",
           createdAt: new Date(),
           likes: 30,
@@ -69,7 +69,7 @@ let database: IDatabase = {
           commentList: [
             {
               id: "abc6",
-              userId: "billgates",
+              username: "billgates",
               createdAt: "2012-02-05T05:13:24Z",
               message: "The weather is always nice when you're rich like me.",
             },

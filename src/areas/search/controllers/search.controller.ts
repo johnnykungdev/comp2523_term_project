@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
+import { PostHelper } from "../../../model/helpers/PostHelper";
+import { UserHelper } from "../../../model/helpers/UserHelper";
 import IController from "../../../interfaces/controller.interface";
 import IPost from "../../../interfaces/post.interface";
 import IUser from "../../../interfaces/user.interface";
@@ -24,7 +26,17 @@ class SearchController implements IController {
   }
 
   private search(req: Request, res: Response, next: NextFunction) {
-    console.log(req.query.query);
+    const query = req.query.query;
+    const userList: IUser[] = UserHelper.search([{ username: query }]);
+    const postList: IPost[] = PostHelper.search([{ message: query }]);
+
+    console.log("userList");
+    console.log(userList);
+
+    console.log("postList");
+    console.log(postList);
+
+    res.render("search/views/search", { userList, postList });
   }
 }
 

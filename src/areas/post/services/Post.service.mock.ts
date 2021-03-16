@@ -7,9 +7,9 @@ export class MockPostService implements IPostService {
   addPost(post: IPost): void {
     PostHelper.addPost(post);
   }
-  getAllPosts(username: string): IPost[] {
+  getUserPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
-    return PostHelper.getAllPosts(username);
+    return PostHelper.getUserPosts(username);
   }
   findById(id: string): IPost {
     // 🚀 Implement this yourself.

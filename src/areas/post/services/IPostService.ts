@@ -6,7 +6,7 @@ export default interface IPostService {
 
   sortPosts(posts: IPost[]): IPost[];
 
-  getAllPosts(username: string): IPost[];
+  getUserPosts(username: string): IPost[];
 
   findById(id: string): IPost | undefined;
 

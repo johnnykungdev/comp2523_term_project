@@ -7,7 +7,7 @@ export class PostService implements IPostService {
     // 🚀 Implement this yourself.
     throw new Error("Method not implemented.");
   }
-  getAllPosts(username: string): IPost[] {
+  getUserPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
     throw new Error("Method not implemented.");
   }

@@ -24,16 +24,16 @@ class PostController implements IController {
   };
 
   private initializeRoutes() {
-    this.router.get(this.path, this.ensureAuthenticated, this.getAllPosts);
+    this.router.get(this.path, this.ensureAuthenticated, this.getUserPosts);
     this.router.get(`${this.path}/:id`, this.ensureAuthenticated, this.getPostById);
     this.router.get(`${this.path}/:id/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
-    this.router.post(`${this.path}`, this.addPost, this.getAllPosts);
+    this.router.post(`${this.path}`, this.addPost, this.getUserPosts);
   }
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
-  private getAllPosts = (req: Request, res: Response) => {
-    const posts = this._postService.getAllPosts(req.user.username);
+  private getUserPosts = (req: Request, res: Response) => {
+    const posts = this._postService.getUserPosts(req.user.username);
 
     res.render("post/views/posts", { posts });
     // res.render("search/views/search");
@@ -47,11 +47,13 @@ class PostController implements IController {
   // 🚀 These post methods needs to be implemented by you
   private createComment = async (req: Request, res: Response, next: NextFunction) => {};
   private addPost = (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
+    console.log("req.user hereee");
+
+    console.log(req.user);
     const post_obj: IPost = {
       id: uuidv4(),
       message: req.body.postText,
-      userId: req.user.id,
+      username: req.user.username,
       createdAt: new Date(),
       commentList: [],
       likes: 0,
