@@ -6,9 +6,8 @@ interface IPost {
   username: string;
   createdAt: Date;
   commentList?: Array<IComment>;
-  likes: number;
+  likes: string[];
   reposts: number;
-  comments: number;
 }
 
 export default IPost;

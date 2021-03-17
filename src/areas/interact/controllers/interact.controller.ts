@@ -27,6 +27,21 @@ class SearchController implements IController {
     this.router.post(`${this.path}/follow`, this.ensureAuthenticated, this.follow_action);
 
     this.router.post(`${this.path}/repost`, this.ensureAuthenticated, this.repost);
+    this.router.post(`${this.path}/like`, this.ensureAuthenticated, this.like);
+  }
+
+  private async like(req: Request, res: Response, next: NextFunction) {
+    const like_obj = {
+      poster_username: req.body.poster_username,
+      post_id: req.body.post_id,
+      current_user: req.user.username,
+    };
+
+    console.log("like_obj");
+    console.log(like_obj);
+
+    await PostHelper.like(like_obj);
+    res.redirect("back");
   }
 
   private search(req: Request, res: Response, next: NextFunction) {

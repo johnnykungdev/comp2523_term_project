@@ -270,13 +270,13 @@
                 >
                 <!-- <span class="text-grey-dark"></span> -->
                 <span class="text-grey-dark"><%= post.originalDate %></span>
-                <span class="inline-block">
+                <!-- <span class="inline-block">
                   <form action="/delete" method="post">
                     <input type="hidden" value="<%= post.postId %>" name="postToDelete" />
                     <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
                   </form>
                   
-                </span>
+                </span> -->
               </div>
 
             </div>
@@ -312,14 +312,25 @@
                       </button> 
                     </form>
                   </span>
-                <span class="mr-8"
-                  ><a
-                    href="#"
+                  <form action="/interact/like" method="post">
+                    <span class="mr-8"
+                  >
+                  <input type="hidden" value="<%= post.username %>" name="poster_username" />
+                  <input type="hidden" value="<%= post.id %>" name="post_id" />
+                  <button
+                    type="submit"
                     class="text-grey-dark hover:no-underline hover:text-red"
-                    ><i class="fa fa-heart fa-lg mr-2"></i> <%= post.likes
-                    %></a
-                  ></span
-                >
+                    >
+                    <% if (post.likes.includes(user.username)) { %>
+                    <i class="fa fa-heart fa-lg mr-2"></i>
+                    <% } else { %>
+                      <i class="fa fa-heart-o fa-lg mr-2"></i>
+                    <% } %>
+                    <%= post.likes.length
+                    %></button
+                  ></span>
+                
+                </form>
               </div>
             </div>
           </div>
@@ -351,10 +362,9 @@
                 <!-- <span class="text-grey-dark"></span> -->
                 <span class="text-grey-dark"><%= post.createdAt %></span>
                 <span class="inline-block">
-                  <form action="/delete" method="post">
-                    <input type="hidden" value="<%= post.postId %>" name="postToDelete" />
-                    <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
-                  </form>
+                  <a href="/posts/<%= post.id %>/delete" >
+                    <i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i>
+                  </a>
                   
                 </span>
               </div>
@@ -392,14 +402,27 @@
                       </button> 
                     </form>
                   </span>
-                <span class="mr-8"
-                  ><a
-                    href="#"
+
+                  <form action="/interact/like" method="post">
+                    <span class="mr-8"
+                  >
+                  <input type="hidden" value="<%= post.username %>" name="poster_username" />
+                  <input type="hidden" value="<%= post.id %>" name="post_id" />
+                  <button
+                    type="submit"
                     class="text-grey-dark hover:no-underline hover:text-red"
-                    ><i class="fa fa-heart fa-lg mr-2"></i> <%= post.likes
-                    %></a
-                  ></span
-                >
+                    >
+                    <% if (post.likes.includes(user.username)) { %>
+                    <i class="fa fa-heart fa-lg mr-2"></i>
+                    <% } else { %>
+                      <i class="fa fa-heart-o fa-lg mr-2"></i>
+                    <% } %>
+                    <%= post.likes.length
+                    %></button
+                  ></span>
+                
+                </form>
+
               </div>
             </div>
           </div>

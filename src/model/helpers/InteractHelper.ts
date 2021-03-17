@@ -33,6 +33,16 @@ export class InteractHelper {
       repostedAt: new Date(),
     };
 
+    for (let i = 0; i < database.users.length; i++) {
+      if ((poster_username = database.users[i].username)) {
+        for (let j = 0; j < database.users[i].posts.length; j++) {
+          if (database.users[i].posts[j].id == post_id) {
+            database.users[i].posts[j].reposts++;
+          }
+        }
+      }
+    }
+
     for (let user of database.users) {
       if (current_user.username == user.username) {
         user.reposts.push(repost_obj);

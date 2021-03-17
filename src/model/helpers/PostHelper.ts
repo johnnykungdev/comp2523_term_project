@@ -2,8 +2,33 @@ import IUser from "../../interfaces/user.interface";
 import IPost from "../../interfaces/post.interface";
 import { database } from "../fakeDB";
 import { UserHelper } from "./UserHelper";
+import IComment from "../../interfaces/comment.interface";
 
 export class PostHelper {
+  private static findWithAttr(array, attr, value) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  static deletePost(post_id) {
+    for (let i = 0; i < database.users.length; i++) {
+      for (let j = 0; j < database.users[i].posts.length; j++) {
+        if (database.users[i].posts[j].id == post_id) {
+          // const index = database.users[i].posts.indexOf(post_id);
+          const index = this.findWithAttr(database.users[i].posts, "id", post_id);
+          database.users[i].posts.splice(index, 1);
+
+          // const inddex = database.users[i].posts[j].likes.indexOf(like_obj.current_user);
+          // database.users[i].posts[j].likes.splice(inddex, 1);
+        }
+      }
+    }
+  }
+
   private static getFollowedPosts(username) {
     const followed_users_names: string[] = UserHelper.select([{ username: username }])[0].following;
     let followed_users: IUser[] = [];
@@ -44,7 +69,7 @@ export class PostHelper {
       for (let u of database.users) {
         // match user
         if (r.poster_username == u.username) {
-          // match poast
+          // match post
           for (let p of u.posts) {
             if (r.post_id == p.id) {
               let p_copy = { ...p, createdAt: r.repostedAt, originalDate: p.createdAt };
@@ -124,5 +149,61 @@ export class PostHelper {
     }
 
     throw new Error("user or post not found");
+  }
+
+  static addComment(post_info, comment: IComment) {
+    for (let i = 0; i < database.users.length; i++) {
+      if (database.users[i].username == post_info.poster_username) {
+        for (let j = 0; j < database.users[i].posts.length; j++) {
+          if (database.users[i].posts[j].id == post_info.post_id) {
+            database.users[i].posts[j].commentList.push(comment);
+            console.log("database.users[i].posts[j].commentList");
+            console.log(database.users[i].posts[j].commentList);
+
+            return;
+          }
+        }
+      }
+    }
+    throw new Error("post or user not found. Comment cannot be added.");
+  }
+
+  // Is there anything can be done with these nested loops?
+  static addReply(reply_locator, reply_content: IComment) {
+    for (let i = 0; i < database.users.length; i++) {
+      if (database.users[i].username == reply_locator.poster_username) {
+        for (let j = 0; j < database.users[i].posts.length; j++) {
+          if (database.users[i].posts[j].id == reply_locator.post_id) {
+            console.log(database.users[i].posts[j].id + " 2 " + reply_locator.post_id);
+            for (let k = 0; k < database.users[i].posts[j].commentList.length; k++) {
+              if (database.users[i].posts[j].commentList[k].id == reply_locator.comment_id) {
+                database.users[i].posts[j].commentList[k].replies.push(reply_content);
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+    throw new Error("post or user or comment not found. reply cannot be added.");
+  }
+
+  static like(like_obj) {
+    for (let i = 0; i < database.users.length; i++) {
+      if (like_obj.poster_username == database.users[i].username) {
+        for (let j = 0; j < database.users[i].posts.length; j++) {
+          if (database.users[i].posts[j].id == like_obj.post_id) {
+            if (database.users[i].posts[j].likes.includes(like_obj.current_user)) {
+              const index = database.users[i].posts[j].likes.indexOf(like_obj.current_user);
+              database.users[i].posts[j].likes.splice(index, 1);
+            } else {
+              database.users[i].posts[j].likes.push(like_obj.current_user);
+            }
+            return;
+          }
+        }
+      }
+    }
+    throw new Error("Something happened, post not liked");
   }
 }

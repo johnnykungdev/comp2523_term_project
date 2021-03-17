@@ -7,6 +7,7 @@ import IPost from "../../../interfaces/post.interface";
 import { PostHelper } from "../../../model/helpers/PostHelper";
 import { UserHelper } from "../../../model/helpers/UserHelper";
 import { InteractHelper } from "../../../model/helpers/InteractHelper";
+import IComment from "../../../interfaces/comment.interface";
 
 class PostController implements IController {
   public path = "/posts";
@@ -28,11 +29,41 @@ class PostController implements IController {
 
   private initializeRoutes() {
     this.router.get(this.path, this.ensureAuthenticated, this.getUserPosts);
-    this.router.get(`${this.path}/:username/:id`, this.ensureAuthenticated, this.getPostById);
     this.router.get(`${this.path}/:id/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
+    this.router.post(`${this.path}/:id/comment/reply`, this.commentReply);
+    this.router.get(`${this.path}/:username/:id`, this.ensureAuthenticated, this.getPostById);
+
     this.router.post(`${this.path}`, this.addPost, this.getUserPosts);
   }
+
+  private deletePost = async (req: Request, res: Response) => {
+    console.log("enter");
+
+    const post_id = req.params.id;
+    await PostHelper.deletePost(post_id);
+    console.log("removed?");
+
+    res.redirect("back");
+  };
+
+  private commentReply = async (req: Request, res: Response) => {
+    const reply_content = {
+      id: uuidv4(),
+      message: req.body.replyText,
+      username: req.user.username,
+      createdAt: new Date(),
+    };
+    const reply_locator = {
+      poster_username: req.body.poster_username,
+      post_id: req.params.id,
+      comment_id: req.body.comment_id,
+    };
+
+    await PostHelper.addReply(reply_locator, reply_content);
+
+    res.redirect("back");
+  };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
   private getUserPosts = (req: Request, res: Response) => {
@@ -44,32 +75,45 @@ class PostController implements IController {
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
   private getPostById = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("req.params.id");
-    console.log(req.params.id);
-    console.log(req.params.username);
+    // console.log("req.params.id");
+    // console.log(req.params.id);
+    // console.log(req.params.username);
 
     const post = PostHelper.select(req.params.username, [{ id: req.params.id }])[0];
 
-    console.log("post post");
+    const user = req.user;
 
-    console.log(post);
-
-    res.render("post/views/post", { post });
+    res.render("post/views/post", { post, user });
   };
 
   // 🚀 These post methods needs to be implemented by you
-  private createComment = async (req: Request, res: Response, next: NextFunction) => {};
-  private addPost = (req: Request, res: Response, next: NextFunction) => {
-    console.log("req.user hereee");
+  private createComment = async (req: Request, res: Response, next: NextFunction) => {
+    const comment_obj: IComment = {
+      id: uuidv4(),
+      message: req.body.commentText,
+      username: req.user.username,
+      createdAt: new Date(),
+      replies: [],
+    };
 
-    console.log(req.user);
+    const post_info = {
+      poster_username: req.body.poster_username,
+      post_id: req.params.id,
+    };
+
+    await PostHelper.addComment(post_info, comment_obj);
+
+    res.redirect("back");
+  };
+
+  private addPost = (req: Request, res: Response, next: NextFunction) => {
     const post_obj: IPost = {
       id: uuidv4(),
       message: req.body.postText,
       username: req.user.username,
       createdAt: new Date(),
       commentList: [],
-      likes: 0,
+      likes: [],
       reposts: 0,
       comments: 0,
     };
@@ -78,7 +122,6 @@ class PostController implements IController {
 
     next();
   };
-  private deletePost = async (req: Request, res: Response, next: NextFunction) => {};
 }
 
 export default PostController;
