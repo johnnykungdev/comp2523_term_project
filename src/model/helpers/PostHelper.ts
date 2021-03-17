@@ -104,4 +104,25 @@ export class PostHelper {
     const allPosts = this.getAllPosts(database.users);
     return conditions.reduce(this._search_reducer, allPosts);
   }
+
+  private static _select_reducer(state, condition) {
+    state = state.filter((user) => {
+      if (user[Object.keys(condition)[0]] == Object.values(condition)[0]) {
+        return true;
+      }
+      return false;
+    });
+
+    return state;
+  }
+
+  static select(username, conditions: {}[]) {
+    for (let u of database.users) {
+      if (username == u.username) {
+        return conditions.reduce(this._select_reducer, u.posts);
+      }
+    }
+
+    throw new Error("user or post not found");
+  }
 }

@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction, Router } from "express";
 import IController from "../../../interfaces/controller.interface";
 import IPostService from "../services/IPostService";
-import { post } from "../../../model/fakeDB";
+// import { post } from "../../../model/fakeDB";
 import { v4 as uuidv4 } from "uuid";
 import IPost from "../../../interfaces/post.interface";
+import { PostHelper } from "../../../model/helpers/PostHelper";
+import { UserHelper } from "../../../model/helpers/UserHelper";
+import { InteractHelper } from "../../../model/helpers/InteractHelper";
 
 class PostController implements IController {
   public path = "/posts";
@@ -25,7 +28,7 @@ class PostController implements IController {
 
   private initializeRoutes() {
     this.router.get(this.path, this.ensureAuthenticated, this.getUserPosts);
-    this.router.get(`${this.path}/:id`, this.ensureAuthenticated, this.getPostById);
+    this.router.get(`${this.path}/:username/:id`, this.ensureAuthenticated, this.getPostById);
     this.router.get(`${this.path}/:id/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}`, this.addPost, this.getUserPosts);
@@ -40,7 +43,17 @@ class PostController implements IController {
   };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
-  private getPostById = async (request: Request, res: Response, next: NextFunction) => {
+  private getPostById = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req.params.id");
+    console.log(req.params.id);
+    console.log(req.params.username);
+
+    const post = PostHelper.select(req.params.username, [{ id: req.params.id }])[0];
+
+    console.log("post post");
+
+    console.log(post);
+
     res.render("post/views/post", { post });
   };
 
