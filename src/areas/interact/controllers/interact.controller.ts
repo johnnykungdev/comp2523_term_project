@@ -25,6 +25,8 @@ class SearchController implements IController {
   private initializeRoutes() {
     this.router.get(`${this.path}/search`, this.ensureAuthenticated, this.search);
     this.router.post(`${this.path}/follow`, this.ensureAuthenticated, this.follow_action);
+
+    this.router.post(`${this.path}/repost`, this.ensureAuthenticated, this.repost);
   }
 
   private search(req: Request, res: Response, next: NextFunction) {
@@ -43,23 +45,34 @@ class SearchController implements IController {
   }
 
   private async follow_action(req: Request, res: Response, next: NextFunction) {
-    console.log(req.body); //{ unfollow_user: 'james123' }
-    console.log(UserHelper.select([{username: req.user.username}]));
-    console.log('following');
-    console.log(UserHelper.select([{username: req.user.username}])[0].following);
+    // console.log(req.body); //{ unfollow_user: 'james123' }
+    // console.log(UserHelper.select([{ username: req.user.username }]));
+    // console.log("following");
+    // console.log(UserHelper.select([{ username: req.user.username }])[0].following);
 
-    if(req.user.username != Object.values(req.body)[0]) {
-      if(Object.keys(req.body)[0] == "follow_user") {
+    if (req.user.username != Object.values(req.body)[0]) {
+      if (Object.keys(req.body)[0] == "follow_user") {
         await InteractHelper.follow(req.user.username, Object.values(req.body)[0]);
-      }
-      else {
+      } else {
         await InteractHelper.unfollow(req.user.username, Object.values(req.body)[0]);
       }
-  
     }
 
-    res.redirect('back');
-    
+    res.redirect("back");
+  }
+
+  private async repost(req: Request, res: Response, next: NextFunction) {
+    // console.log("repost repost");
+    // console.log(req.body);
+    // console.log(req.user);
+    console.log("where is the form?");
+
+    console.log(req.body);
+
+    await InteractHelper.repost(req.user, req.body.username, req.body.post_id);
+
+    // res.redirect("back");
+    res.end();
   }
 }
 
