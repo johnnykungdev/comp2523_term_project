@@ -25,6 +25,9 @@ class App {
   private initializeMiddlewares() {
     require("./middleware/express.middlewares")(this._app);
     require("./middleware/passport.middlewares")(this._app);
+    // app.use(passport.initialize());
+    // app.use(passport.session());
+    // passport.use(localLogin.strategy);
   }
 
   private initializeErrorHandling() {
