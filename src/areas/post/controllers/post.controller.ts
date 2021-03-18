@@ -8,6 +8,7 @@ import { PostHelper } from "../../../model/helpers/PostHelper";
 import { UserHelper } from "../../../model/helpers/UserHelper";
 import { InteractHelper } from "../../../model/helpers/InteractHelper";
 import IComment from "../../../interfaces/comment.interface";
+import { database } from "../../../model/fakeDB";
 
 class PostController implements IController {
   public path = "/posts";
@@ -29,6 +30,7 @@ class PostController implements IController {
 
   private initializeRoutes() {
     this.router.get(this.path, this.ensureAuthenticated, this.getUserPosts);
+    this.router.get(`${this.path}/all`, this.getAllPosts);
     this.router.get(`${this.path}/:id/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}/:id/comment/reply`, this.commentReply);
@@ -36,6 +38,12 @@ class PostController implements IController {
 
     this.router.post(`${this.path}`, this.addPost, this.getUserPosts);
   }
+
+  private getAllPosts = (req: Request, res: Response) => {
+    const posts = PostHelper.getAllPosts(database.users);
+    const user = req.user;
+    res.render("post/views/feeds", { posts, user });
+  };
 
   private deletePost = async (req: Request, res: Response) => {
     console.log("enter");

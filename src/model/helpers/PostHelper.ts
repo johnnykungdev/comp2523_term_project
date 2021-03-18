@@ -46,18 +46,15 @@ export class PostHelper {
     return [];
   }
 
-  private static getAllPosts(user_group): IPost[] {
-    console.log("not iterable?");
-
-    console.log(user_group);
-
+  static getAllPosts(user_group): IPost[] {
     let allPosts: IPost[] = [];
     for (let user of user_group) {
-      console.log("bill where are you?");
-      console.log(user);
-
       allPosts.push(...user.posts);
     }
+
+    console.log("all posts");
+    console.log(allPosts);
+
     return allPosts;
   }
 
