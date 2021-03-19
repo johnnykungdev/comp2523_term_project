@@ -41,6 +41,8 @@ export class UserHelper {
       lastName: form_obj.lastName,
       username: form_obj.username,
       posts: [],
+      following: [],
+      reposts: [],
     });
 
     return this.select([{ username: form_obj.username }]);

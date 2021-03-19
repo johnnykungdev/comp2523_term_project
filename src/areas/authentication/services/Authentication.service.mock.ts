@@ -19,15 +19,14 @@ export class MockAuthenticationService implements IAuthenticationService {
     return user;
   }
 
-  public async createUser(form_obj): Promise<IUser> {
-    console.log("inside service createUser");
-
-    if (UserHelper.select([{ username: form_obj.username }])[0] || UserHelper.select([{ email: form_obj.email }])[0]) {
-      throw new Error("User already exist");
-    } else {
-      console.log("about to call  DB helper");
-
+  public async createUser(form_obj): Promise<null | IUser> {
+    if (
+      !UserHelper.select([{ username: form_obj.username }])[0] &&
+      !UserHelper.select([{ email: form_obj.email }])[0]
+    ) {
       return UserHelper.createUser(form_obj);
     }
+
+    return null;
   }
 }

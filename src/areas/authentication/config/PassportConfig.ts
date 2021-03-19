@@ -5,6 +5,7 @@
 //    Ensure code is fully typed wherever possible (unless inference can be made)
 import { MockAuthenticationService } from "../services";
 import * as passportLocal from "passport-local";
+import WrongCredentialsException from "../../../exceptions/WrongCredentialsException";
 const LocalStrategy = passportLocal.Strategy;
 
 // Export only strategy here, not the pp obj
@@ -25,9 +26,10 @@ export default class PassportConfig {
 
         return this._user
           ? done(null, this._user)
-          : done(null, false, {
-              message: "Your login details are not valid. Please try again",
-            });
+          : // : done(null, false, {
+            //     message: "Your login details are not valid. Please try again",
+            //   });
+            done(new WrongCredentialsException(), false);
       }
     );
   }

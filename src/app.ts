@@ -14,6 +14,7 @@ class App {
     this.initializeMiddlewares();
     this.initializeControllers(controllers);
     this.initializeErrorHandling();
+    this.initializeErrorHandling2();
   }
 
   public start() {
@@ -38,6 +39,10 @@ class App {
     controllers.forEach((controller) => {
       this._app.use("/", controller.router);
     });
+  }
+
+  private initializeErrorHandling2() {
+    this._app.use(errorMiddleware);
   }
 }
 
