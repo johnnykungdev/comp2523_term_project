@@ -3,6 +3,10 @@ import path from "path";
 import session from "express-session";
 import morgan from "morgan";
 import flash from "connect-flash";
+import redis from "redis";
+import connectRedis from "connect-redis";
+import dotenv from "dotenv";
+dotenv.config();
 
 module.exports = (app) => {
   // Static File Serving and Post Body Parsing
@@ -14,9 +18,22 @@ module.exports = (app) => {
   // Logging Middleware
   app.use(morgan("tiny"));
 
+  function getStore() {
+    if (process.env.IS_HEROKU) {
+      const RedisStore = connectRedis(session);
+      const redisClient = redis.createClient({
+        port: parseInt(process.env.REDIS_PORT),
+        host: process.env.REDIS_HOST,
+        password: process.env.REDIS_PASSWORD,
+      });
+      return new RedisStore({ client: redisClient });
+    }
+  }
+
   // Session Configuration
   app.use(
     session({
+      store: getStore(), // If nothing returned, expect to use MemoryStore?
       secret: "secret",
       resave: false,
       saveUninitialized: false,

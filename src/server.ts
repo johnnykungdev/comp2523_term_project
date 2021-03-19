@@ -5,8 +5,8 @@ import { MockAuthenticationService } from "./areas/authentication/services/Authe
 import { PostService, MockPostService } from "./areas/post/services";
 
 const server = new App([
-  new PostController(new MockPostService()),
   new AuthenticationController(new MockAuthenticationService()),
+  new PostController(new MockPostService()),
 ]);
 
 server.start();
