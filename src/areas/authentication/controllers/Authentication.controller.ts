@@ -1,13 +1,16 @@
 import express from "express";
 import IController from "../../../interfaces/controller.interface";
 import { IAuthenticationService } from "../services";
+import passport from "passport";
 
 class AuthenticationController implements IController {
   public path = "/auth";
   public router = express.Router();
+  private _auth_service: IAuthenticationService;
 
   constructor(service: IAuthenticationService) {
     this.initializeRoutes();
+    this._auth_service = service;
   }
 
   private initializeRoutes() {
@@ -27,7 +30,20 @@ class AuthenticationController implements IController {
   };
 
   // 🔑 These Authentication methods needs to be implemented by you
-  private login = (req: express.Request, res: express.Response) => {};
+  private login = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    passport.authenticate("local", function (err, user) {
+      if (err) {
+        return next(err);
+      }
+      req.login(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+      });
+      return res.redirect("/posts");
+    })(req, res, next);
+  };
+
   private registration = async (req: express.Request, res: express.Response, next: express.NextFunction) => {};
   private logout = async (req: express.Request, res: express.Response) => {};
 }
