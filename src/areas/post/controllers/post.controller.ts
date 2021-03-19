@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import IController from "../../../interfaces/controller.interface";
+import CustomReq from "../../../interfaces/request.interface";
+
 import IPostService from "../services/IPostService";
 import { post } from "../../../model/fakeDB";
 
@@ -22,7 +24,7 @@ class PostController implements IController {
   }
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
-  private getAllPosts = (req: Request, res: Response) => {
+  private getAllPosts = (req: CustomReq, res: Response) => {
     const user = req.user;
     const posts = this._postService.getAllPosts(user.username);
     res.render("post/views/posts", { posts, user });
