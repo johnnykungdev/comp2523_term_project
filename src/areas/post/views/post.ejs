@@ -28,16 +28,7 @@
       <main
         class="sm:h-full flex-1 flex flex-col min-h-0 min-w-0 overflow-auto"
       >
-        <nav class="border-b bg-white px-6 py-2 flex items-center min-w-0 h-14">
-          <h1 class="font-semibold text-lg"></h1>
-          <span
-          ><a
-            href="/posts"
-            class="text-grey-dark hover:no-underline hover:text-green"
-            ><i class="fa fa-arrow-left fa-lg mr-2"></i> Back</a
-          ></span>
-          <span class="flex-1"></span>
-        </nav>
+        <%- include('../../_ejs_partials/header.ejs') %>
         <section class="flex-1 pt-3 md:p-6 lg:mb-0 lg:min-h-0 lg:min-w-0">
           <div class="flex flex-col lg:flex-row h-full w-full">
             <div
@@ -157,7 +148,8 @@
            <textarea name="commentText" class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body" placeholder='Type Your Comment' required></textarea>
 
         </div>
-        <input type="hidden" value="<%= post.username %>" name="poster_username" />
+        <input hidden type="text" value="<%= post.username %>" name="poster_username" />
+        <input hidden  type="text" name="post_id" value="<%= post.id %>" />
         <div class="w-full md:w-full flex items-start md:w-full px-3">
            <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
               <svg fill="none" class="w-5 h-5 text-gray-600 mr-1" viewBox="0 0 24 24" stroke="currentColor">

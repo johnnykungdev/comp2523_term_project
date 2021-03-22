@@ -9,6 +9,7 @@ import { UserHelper } from "../../../model/helpers/UserHelper";
 import { InteractHelper } from "../../../model/helpers/InteractHelper";
 import IComment from "../../../interfaces/comment.interface";
 import { database } from "../../../model/fakeDB";
+import IUser from "../../../interfaces/user.interface";
 
 class PostController implements IController {
   public path = "/posts";
@@ -35,13 +36,15 @@ class PostController implements IController {
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}/:id/comment/reply`, this.commentReply);
     this.router.get(`${this.path}/:username/:id`, this.ensureAuthenticated, this.getPostById);
+    this.router.get(`${this.path}/notice/:id/:post_id`, this.ensureAuthenticated, this.getPostByNotification);
 
     this.router.post(`${this.path}`, this.addPost, this.getUserPosts);
   }
 
   private getAllPosts = (req: Request, res: Response) => {
     const posts = PostHelper.getAllPosts(database.users);
-    const user = req.user;
+    const user = req.user as IUser;
+
     res.render("post/views/feeds", { posts, user });
   };
 
@@ -83,14 +86,23 @@ class PostController implements IController {
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
   private getPostById = async (req: Request, res: Response, next: NextFunction) => {
-    // console.log("req.params.id");
-    // console.log(req.params.id);
-    // console.log(req.params.username);
-
     const post = PostHelper.select(req.params.username, [{ id: req.params.id }])[0];
 
     const user = req.user;
 
+    res.render("post/views/post", { post, user });
+  };
+
+  private getPostByNotification = async (req: Request, res: Response, next: NextFunction) => {
+    let username = req.user.username;
+
+    console.log("fidning poast");
+    console.log(username);
+    console.log(req.params.post_id);
+
+    const post = PostHelper.select(username, [{ id: req.params.post_id }])[0];
+    const user = req.user;
+    PostHelper.removeNotice(req.params.id);
     res.render("post/views/post", { post, user });
   };
 
@@ -110,6 +122,14 @@ class PostController implements IController {
     };
 
     await PostHelper.addComment(post_info, comment_obj);
+
+    const comment_notice = {
+      poster_username: req.body.poster_username,
+      post_id: req.body.post_id,
+      current_user: req.user.username,
+    };
+
+    PostHelper.addNotification(comment_notice, "commented");
 
     res.redirect("back");
   };

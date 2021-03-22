@@ -3,6 +3,7 @@ import IPost from "../../interfaces/post.interface";
 import { database } from "../fakeDB";
 import { UserHelper } from "./UserHelper";
 import IComment from "../../interfaces/comment.interface";
+import { v4 as uuidv4 } from "uuid";
 
 export class PostHelper {
   private static findWithAttr(array, attr, value) {
@@ -12,6 +13,22 @@ export class PostHelper {
       }
     }
     return -1;
+  }
+
+  static addNotification(info_obj, type: string) {
+    const n_obj = {
+      id: uuidv4(),
+      createdAt: new Date(),
+      type: type,
+      post_id: info_obj.post_id,
+      originator: info_obj.current_user,
+    };
+
+    for (let i = 0; i < database.users.length; i++) {
+      if (database.users[i].username == info_obj.poster_username) {
+        database.users[i].notifications.push(n_obj);
+      }
+    }
   }
 
   static deletePost(post_id) {
@@ -24,6 +41,27 @@ export class PostHelper {
 
           // const inddex = database.users[i].posts[j].likes.indexOf(like_obj.current_user);
           // database.users[i].posts[j].likes.splice(inddex, 1);
+        }
+      }
+    }
+  }
+
+  static removeNotice(notice_id) {
+    for (let j = 0; j < database.users.length; j++) {
+      for (let i = 0; i < database.users[j].notifications.length; i++) {
+        // console.log("database.users[j].notifications[i]");
+
+        // console.log(database.users[j].notifications[i].id);
+
+        // console.log(notice_id);
+
+        if (database.users[j].notifications[i].id == notice_id) {
+          console.log("matched");
+
+          console.log("index " + i);
+
+          database.users[j].notifications.splice(i, 1);
+          console.log(database.users[j].notifications);
         }
       }
     }
@@ -70,9 +108,6 @@ export class PostHelper {
           for (let p of u.posts) {
             if (r.post_id == p.id) {
               let p_copy = { ...p, createdAt: r.repostedAt, originalDate: p.createdAt };
-              console.log("p_copy p_copy");
-
-              console.log(p_copy);
               post_array.push(p_copy);
             }
           }

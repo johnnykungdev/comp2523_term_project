@@ -10,4 +10,5 @@ export default interface IUser {
   posts?: Array<IPost>;
   following?: Array<string>;
   reposts?: Array<object>;
+  notifications?: Array<object>;
 }

@@ -28,19 +28,33 @@ class SearchController implements IController {
 
     this.router.post(`${this.path}/repost`, this.ensureAuthenticated, this.repost);
     this.router.post(`${this.path}/like`, this.ensureAuthenticated, this.like);
+    this.router.get(`${this.path}/notifications`, this.ensureAuthenticated, this.notifications);
+  }
+
+  private async notifications(req: Request, res: Response, next: NextFunction) {
+    console.log("notifications notifications");
+
+    const user = req.user as IUser;
+    let notifications = UserHelper.select([{ username: user.username }])[0].notifications;
+    notifications.sort((a, b) => {
+      var dateA = new Date(a.createdAt);
+      var dateB = new Date(b.createdAt);
+      return dateB - dateA;
+    });
+    res.send(notifications);
   }
 
   private async like(req: Request, res: Response, next: NextFunction) {
-    const like_obj = {
+    const like_notice = {
       poster_username: req.body.poster_username,
       post_id: req.body.post_id,
       current_user: req.user.username,
     };
 
-    console.log("like_obj");
-    console.log(like_obj);
+    await PostHelper.like(like_notice);
 
-    await PostHelper.like(like_obj);
+    PostHelper.addNotification(like_notice, "liked");
+
     res.redirect("back");
   }
 
@@ -48,7 +62,7 @@ class SearchController implements IController {
     const query = req.query.query;
     const userList: IUser[] = UserHelper.search([{ username: query }]);
     const postList: IPost[] = PostHelper.search([{ message: query }]);
-    const user = req.user;
+    const current_user = req.user;
 
     // console.log("userList");
     // console.log(userList);
@@ -56,7 +70,7 @@ class SearchController implements IController {
     // console.log("postList");
     // console.log(postList);
 
-    res.render("interact/views/search", { userList, postList, user });
+    res.render("interact/views/search", { userList, postList, current_user });
   }
 
   private async follow_action(req: Request, res: Response, next: NextFunction) {
@@ -80,6 +94,14 @@ class SearchController implements IController {
     await InteractHelper.repost(req.user, req.body.username, req.body.post_id);
 
     // res.redirect("back");
+    const repost_notice = {
+      poster_username: req.body.username,
+      post_id: req.body.post_id,
+      current_user: req.user.username,
+    };
+
+    PostHelper.addNotification(repost_notice, "reposted");
+
     res.end();
   }
 }

@@ -1,5 +1,3 @@
-console.log("stopper");
-
 // document.getElementsByClassName("oop_repost_form").addEventListener("submit", function (e) {
 //   e.preventDefault();
 //   console.log("punked!");

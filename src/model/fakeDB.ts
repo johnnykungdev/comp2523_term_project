@@ -11,6 +11,15 @@ let database: IDatabase = {
       firstName: "Bill",
       lastName: "Gates",
       username: "billgates",
+      notifications: [
+        {
+          id: "bn1",
+          createdAt: "2012-01-09T12:25:13Z",
+          type: "commented",
+          post_id: "abc1",
+          originator: "afsfds",
+        },
+      ],
       posts: [
         {
           id: "abc1",
@@ -40,6 +49,15 @@ let database: IDatabase = {
       password: "james123",
       firstName: "James",
       lastName: "Smith",
+      notifications: [
+        {
+          id: "jn3",
+          createdAt: "2012-01-09T10:25:13Z",
+          type: "reposted",
+          post_id: "abc3",
+          originator: "afsfds",
+        },
+      ],
       posts: [
         {
           id: "abc3",
