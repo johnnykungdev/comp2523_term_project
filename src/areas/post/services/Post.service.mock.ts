@@ -10,6 +10,9 @@ export class MockPostService implements IPostService {
   }
   getAllPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
+
+    console.log("getAllPosts " + username);
+
     const user = DbHelper.select([{ username: username }]);
     const ownposts = user[0].posts;
 
