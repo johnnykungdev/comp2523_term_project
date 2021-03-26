@@ -3,6 +3,7 @@ import IController from "../../../interfaces/controller.interface";
 import { IAuthenticationService } from "../services";
 import passport from "passport";
 import EmailAlreadyExistsException from "../../../exceptions/EmailAlreadyExists";
+import HttpException from "../../../exceptions/HttpException";
 
 class AuthenticationController implements IController {
   public path = "/auth";
@@ -56,13 +57,16 @@ class AuthenticationController implements IController {
   };
 
   private registration = async (req: Request, res: Response, next: NextFunction) => {
-    const user = await this._auth_service.createUser(req.body);
-
-    if (user) {
-      req.flash("info", `Sign up success, ${user.username}. Please login now`);
-      res.redirect("/auth/login");
-    } else {
-      next(new EmailAlreadyExistsException(req.body.email, req.body.username));
+    try {
+      const user = await this._auth_service.createUser(req.body);
+      if (user) {
+        req.flash("info", `Sign up success, ${user.username}. Please login now`);
+        res.redirect("/auth/login");
+      } else {
+        next(new EmailAlreadyExistsException(req.body.email, req.body.username));
+      }
+    } catch (error) {
+      next(new HttpException(500, error));
     }
   };
   private logout = async (req: Request, res: Response) => {
