@@ -5,7 +5,7 @@ import IPostService from "../services/IPostService";
 import { v4 as uuidv4 } from "uuid";
 import IPost from "../../../interfaces/post.interface";
 import { PostHelper } from "../../../model/helpers/PostHelper";
-import { UserHelper } from "../../../model/helpers/UserHelper";
+import { DbHelper } from "../../../model/helpers/DbHelper";
 import { InteractHelper } from "../../../model/helpers/InteractHelper";
 import IComment from "../../../interfaces/comment.interface";
 import { database } from "../../../model/fakeDB";
@@ -58,6 +58,25 @@ class PostController implements IController {
     res.redirect("back");
   };
 
+  // OLD commentReply replaced by the one below
+  // private commentReply = async (req: Request, res: Response) => {
+  //   const reply_content = {
+  //     id: uuidv4(),
+  //     message: req.body.replyText,
+  //     username: req.user.username,
+  //     createdAt: new Date(),
+  //   };
+  //   const reply_locator = {
+  //     poster_username: req.body.poster_username,
+  //     post_id: req.params.id,
+  //     comment_id: req.body.comment_id,
+  //   };
+
+  //   await PostHelper.addReply(reply_locator, reply_content);
+
+  //   res.redirect("back");
+  // };
+
   private commentReply = async (req: Request, res: Response) => {
     const reply_content = {
       id: uuidv4(),
@@ -65,15 +84,25 @@ class PostController implements IController {
       username: req.user.username,
       createdAt: new Date(),
     };
-    const reply_locator = {
-      poster_username: req.body.poster_username,
-      post_id: req.params.id,
-      comment_id: req.body.comment_id,
-    };
 
-    await PostHelper.addReply(reply_locator, reply_content);
+    const arr = [
+      { users: { username: req.body.poster_username } },
+      { posts: { id: req.params.id } },
+      { commentList: { id: req.body.comment_id } },
+    ];
 
-    res.redirect("back");
+    let returned_reference = await DbHelper.recurseSelect(arr);
+
+    // If sucessfully located comment
+    if (returned_reference) {
+      console.log("inside new commentReply");
+
+      returned_reference.replies.push(reply_content);
+      res.redirect("back");
+    } else {
+      // to do, handle error with actual middlewear...
+      throw new Error("No comment found");
+    }
   };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
