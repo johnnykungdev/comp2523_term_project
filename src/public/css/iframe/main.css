@@ -1,0 +1,73 @@
+body {
+  max-width: 400px;
+  margin: auto;
+  position: relative;
+  height: 100vh;
+}
+
+section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+}
+
+.bottom_nav .nav_item a {
+  color: white;
+}
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+body {
+  border-style: solid;
+}
+.chat_header {
+  height: 60px;
+  background-color: black;
+}
+
+.chat_header .back_arrow {
+  width: 30px;
+  margin: 0 15px;
+}
+
+.chat_header .profile_thumb {
+  height: 50px;
+}
+
+.messages.flex {
+  flex-direction: column;
+}
+
+.messages p {
+  font-size: 1.5em;
+}
+.messages .my_msg {
+  align-self: flex-start;
+  margin-left: 10px;
+}
+.messages .his_msg {
+  align-self: flex-end;
+  margin-right: 10px;
+}
+
+.msg_input {
+  grid-template-columns: 4fr 1fr;
+  position: absolute;
+  bottom: 0;
+}
+
+.msg_input .submit {
+  text-align: center;
+  background-color: black;
+  color: white;
+}
