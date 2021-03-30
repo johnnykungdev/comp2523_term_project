@@ -47,4 +47,12 @@ export class DbHelper {
 
     return objs_arr.reduce(recurse_loop, database);
   }
+
+  static getUsersByName(userName: string): object {
+    return this._db.filter(user => user["firstName"] === userName)
+  }
+
+  static getPostsByKeyWord(userName: string): object {
+    return this._db.filter(user => user["firstName"] === userName)
+  }
 }
