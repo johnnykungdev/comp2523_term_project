@@ -16,7 +16,7 @@
       <main class="sm:h-full flex-1 flex flex-col min-h-0 min-w-0 overflow-auto">
         <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-34">
 
-          <%- include('../../_ejs_partials/header.ejs') %>
+          <%- include('../../../_ejs_partials/header.ejs') %>
 
           <div class="flex flex-wrap text-center justify-center">
             <div class="w-full lg:w-6/12 px-4">
@@ -93,96 +93,8 @@
           </div>
           <div class="flex flex-wrap mt-12 justify-center">
             <div class="flex-c">
-              <% postList.forEach(post => { %>
-                <div class="flex bg-gray-100 mb-4 rounded-lg">
-                  <div class="w-1/8 text-right pl-3 pt-3">
-                    <div>
-                      <a href="#"
-                        ><img
-                          src="https://user-images.githubusercontent.com/76543451/103982284-0a6f0b00-5138-11eb-872b-0b9e70fc5c25.gif"
-                          alt="avatar"
-                          class="rounded-full h-12 w-12 mr-2"
-                      /></a>
-                    </div>
-                  </div>
-        
-                  <div class="w-7/8 p-3 pl-0">
-                    <!-- <div class="text-xs text-grey-dark">Reposted</div> -->
-                    <div class="flex justify-between">
-                      <div>
-                        <span class="font-bold"
-                          ><a href="#" class="text-black"
-                            ><%= post.username %></a
-                          ></span
-                        >
-                        <!-- <span class="text-grey-dark"></span> -->
-                        <span class="text-grey-dark"><%= post.createdAt %></span>
-                        <span class="inline-block">
-                          <form action="/delete" method="post">
-                            <input type="hidden" value="<%= post.postId %>" name="postToDelete" />
-                            <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
-                          </form>
-                          
-                        </span>
-                      </div>
-        
-                    </div>
-                    <div>
-                      <div class="mb-4">
-                        <p class="mb-6"><%= post.message %></p>
-                      </div>
-                      <div class="pb-2 flex">
-                <span class="mr-8"
-                  ><a
-                    href="/posts/<%= post.username %>/<%= post.id %>"
-                    class="text-grey-dark hover:no-underline hover:text-blue-light"
-                    ><i class="fa fa-comment fa-lg mr-2"></i> <%=
-                    post.commentList.length %></a
-                  ></span
-                >
-                  <span class="mr-8">
-                    <!-- <form action="/interact/repost" method="post"> -->
-                    <form id="<%= post.id %>" class="oop_repost_form">
-
-                      <input hidden class="oop_post_username" type="text" name="username" value="<%= post.username %>"
-                      />
-                      <input hidden class="oop_post_id"  type="text" name="post_id" value="<%= post.id %>"
-                      />
-
-                      <button
-                        class="oop_repost_btn text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                        style="transition: all 0.15s ease"
-                        type="submit"
-                      >
-                      <i class="fa fa-retweet fa-lg mr-2"></i> <%=
-                      post.reposts %>
-                      </button> 
-                    </form>
-                  </span>
-                  <form action="/interact/like" method="post">
-                    <span class="mr-8"
-                  >
-                  <input type="hidden" value="<%= post.username %>" name="poster_username" />
-                  <input type="hidden" value="<%= post.id %>" name="post_id" />
-                  <button
-                    type="submit"
-                    class="text-grey-dark hover:no-underline hover:text-red"
-                    >
-                    <% if (post.likes.includes(user.username)) { %>
-                    <i class="fa fa-heart fa-lg mr-2"></i>
-                    <% } else { %>
-                      <i class="fa fa-heart-o fa-lg mr-2"></i>
-                    <% } %>
-                    <%= post.likes.length
-                    %></button
-                  ></span>
-                
-                </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <% }) %>
+              <% postList.forEach(function(post){ %> <%- include('../../../_ejs_partials/renderPost.ejs', {post: post, user:
+      user}); %> <% });%>
             </div>
           </div>
         </div>

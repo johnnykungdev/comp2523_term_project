@@ -62,7 +62,7 @@ class SearchController implements IController {
     const query = req.query.query;
     const userList: IUser[] = UserHelper.search([{ username: query }]);
     const postList: IPost[] = PostHelper.search([{ message: query }]);
-    const current_user = req.user;
+    const user = req.user;
 
     // console.log("userList");
     // console.log(userList);
@@ -70,7 +70,7 @@ class SearchController implements IController {
     // console.log("postList");
     // console.log(postList);
 
-    res.render("interact/views/search", { userList, postList, current_user });
+    res.render("interact/views/NEW_VIEW/search", { userList, postList, user });
   }
 
   private async follow_action(req: Request, res: Response, next: NextFunction) {

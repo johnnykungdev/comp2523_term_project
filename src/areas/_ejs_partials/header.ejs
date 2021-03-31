@@ -1,5 +1,9 @@
 <head>
   <link rel="stylesheet" href="/css/header.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -13,7 +17,7 @@
       <a href="/posts/all">devHouse</a>
     </span>
   </div>
-  <h2 class="big"><a href="/posts">Home page</a></h2>
+  <h2 class="big flex items-center"><a href="/posts">Home page</a></h2>
   <div class="items-center hidden px-2 space-x-2 md:flex-1 md:flex md:mr-auto md:ml-5">
     <span>
       <svg
@@ -66,10 +70,7 @@
       <!-- Notification Button -->
       <div class="relative" x-data="{ isOpen: false }">
         <!-- red dot -->
-        <div id="notification_bubble">
-          <!-- <div class="absolute right-0 p-1 bg-red-400 rounded-full animate-ping"></div>
-            <div class="absolute right-0 p-1 bg-red-400 border rounded-full"></div> -->
-        </div>
+        <div id="notification_bubble"></div>
 
         <button class="oop-notice-btn p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring">
           <svg
@@ -137,6 +138,6 @@
       </div>
     </div>
     <script src="/js/header.js"></script>
-    <script src="/js/notifications.js"></script>
+    <!-- <script src="/js/notifications.js"></script> -->
   </div>
 </header>

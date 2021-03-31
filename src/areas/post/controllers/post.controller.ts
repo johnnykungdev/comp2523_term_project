@@ -109,8 +109,8 @@ class PostController implements IController {
   private getUserPosts = (req: Request, res: Response) => {
     const posts = this._postService.getUserPosts(req.user.username);
     const user = req.user;
-    res.render("post/views/posts", { posts, user });
-    // res.render("search/views/interact");
+    // res.render("post/views/posts", { posts, user });
+    res.render("post/views/NEW_VIEW/posts", { posts, user });
   };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
@@ -119,7 +119,7 @@ class PostController implements IController {
 
     const user = req.user;
 
-    res.render("post/views/post", { post, user });
+    res.render("post/views/NEW_VIEW/post", { post, user });
   };
 
   private getPostByNotification = async (req: Request, res: Response, next: NextFunction) => {
@@ -132,7 +132,7 @@ class PostController implements IController {
     const post = PostHelper.select(username, [{ id: req.params.post_id }])[0];
     const user = req.user;
     PostHelper.removeNotice(req.params.id);
-    res.render("post/views/post", { post, user });
+    res.render("post/views/NEW_VIEW/post", { post, user });
   };
 
   // 🚀 These post methods needs to be implemented by you
