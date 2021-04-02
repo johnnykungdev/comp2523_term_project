@@ -3,6 +3,8 @@ import IController from "../../../interfaces/controller.interface";
 import IPostService from "../services/IPostService";
 import { post } from "../../../model/fakeDB";
 import IUser from "../../../interfaces/user.interface";
+import IPost from '../../../interfaces/post.interface';
+import { Request, Request } from "node-fetch";
 
 class PostController implements IController {
   public path = "/posts";
@@ -39,7 +41,11 @@ class PostController implements IController {
 
   // 🚀 These post methods needs to be implemented by you
   private createComment = async (req: Request, res: Response, next: NextFunction) => {};
-  private createPost = async (req: Request, res: Response, next: NextFunction) => {};
+  private createPost = async (req: Request, res: Response, next: NextFunction) => {
+    const newPost: IPost = this._postService.buildNewPost(req);
+    this._postService.addPost(newPost, req.user.id)
+    res.redirect("/posts")
+  };
   private deletePost = async (req: Request, res: Response, next: NextFunction) => {};
 }
 
