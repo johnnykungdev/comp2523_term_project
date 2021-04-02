@@ -36,7 +36,7 @@ const database: IDatabase = {
       id: "2",
       username: "james123",
       email: "james123@gmail.com",
-      password: "1",
+      password: "james123",
       firstName: "James",
       lastName: "Smith",
       posts: [
@@ -60,7 +60,7 @@ const database: IDatabase = {
         {
           id: "abc5",
           userId: "james123",
-          message: "Nice weather today in Vancouver",
+          message: "Nice weather today in Vancouver - james",
           createdAt: new Date(),
           likes: 30,
           reposts: 50,
@@ -89,7 +89,7 @@ const database: IDatabase = {
         {
           id: "abc7",
           userId: "billbob",
-          message: "Microsoft is a bad company",
+          message: "Microsoft is a bad company. Do you agree james?",
           createdAt: new Date(),
           likes: 3,
           reposts: 5,
