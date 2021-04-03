@@ -19,7 +19,7 @@ class PostController implements IController {
   private initializeRoutes() {
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPostById);
-    this.router.get(`${this.path}/:id/delete`, this.deletePost);
+    this.router.post(`${this.path}/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}`, this.createPost);
   }
@@ -46,7 +46,12 @@ class PostController implements IController {
     this._postService.addPost(newPost, req.user.id)
     res.redirect("/posts")
   };
-  private deletePost = async (req: Request, res: Response, next: NextFunction) => {};
+  private deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    const deletedPostId = req.body.postToDelete
+    const userId = req.user.id
+    this._postService.deletePost(userId, deletedPostId)
+    res.redirect("/posts")
+  };
 }
 
 export default PostController;

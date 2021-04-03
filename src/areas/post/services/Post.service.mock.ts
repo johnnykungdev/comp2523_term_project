@@ -54,4 +54,8 @@ export class MockPostService implements IPostService {
       comments: 0
     }
   }
+
+  deletePost(userId: string, postId: string) {
+    DbHelper.deletePost(userId, postId)
+  }
 }
