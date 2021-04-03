@@ -47,4 +47,52 @@ export class DbHelper {
 
     return objs_arr.reduce(recurse_loop, database);
   }
+
+  static insertComment(userId, postId, comment) {
+    const matchedUser = database.users.find(user => user.id)
+    if (matchedUser) {
+      const matchedPost = matchedUser.posts.find(post => post.id)
+      if (matchedPost) {
+        matchedPost.commentList.push(comment)
+      } else {
+        throw new Error("Post not found.")
+      }
+    } else {
+      throw new Error("User not found.")
+    }
+  }
+
+  //insertOne({})
+  static insertOne(parent: {type: string, conditionType: string, condition: string | number}, newObject: { type: string, newContent: any}) {
+    function recursiveFindAndInsert(databaseObject: any, query: { type: string, conditionType: string, condition: string | number}) {
+      for (let infoType in databaseObject) {
+        if (infoType === query.type) {
+          const result = databaseObject[infoType].find(item => item[query.conditionType] === query.condition)
+          if (result) result[newObject.type].push(newObject.newContent)
+        } else if (databaseObject[infoType] && infoType !== query.type && typeof databaseObject[infoType] === "object") {
+          recursiveFindAndInsert(databaseObject[infoType], query)
+        } 
+      }
+    }
+    recursiveFindAndInsert(database, parent)
+    console.log(this.findOne(parent))
+  }
+
+  //ex: findOne({ type: "posts", conditionType: "id", condition: "abc1" })
+  static findOne(query: { type: string, conditionType: string, condition: string | number}) {
+    let finalResult = undefined
+    function recursiveFind(databaseObject: any, query: { type: string, conditionType: string, condition: string | number}) {
+      for (let infoType in databaseObject) {
+        if (infoType === query.type) {
+          const result = databaseObject[infoType].find(item => item[query.conditionType] === query.condition)
+          if (result) finalResult = result
+        } else if (databaseObject[infoType] && infoType !== query.type && typeof databaseObject[infoType] === "object") {
+          recursiveFind(databaseObject[infoType], query)
+        } 
+      }
+    }
+
+    recursiveFind(database, query)
+    return finalResult
+  }
 }
