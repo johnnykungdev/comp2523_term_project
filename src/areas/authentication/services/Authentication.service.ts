@@ -1,30 +1,42 @@
 import IUser from "../../../interfaces/user.interface";
 import { IAuthenticationService } from "./IAuthentication.service";
-import {User} from "../../../../models/user";
+import { Sequelize, DataTypes } from "sequelize";
+import databaseConnectionString from "../../../../config/databaseConnectionSequelize";
+import userModelFunc from "../../../../models/user";
+const sequelize = new Sequelize(databaseConnectionString);
+const userModel = userModelFunc(sequelize, DataTypes);
+
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
 export class AuthenticationService implements IAuthenticationService {
   // ⭐️ _db should be a reference to your real database driver
   readonly _db: any;
-  usr = new User();
+
   async findUserByEmail(email: String): Promise<IUser> {
-    const user = await this.usr.findAll({
+    console.log("findUserByEmail findUserByEmail");
+    
+    const user = await userModel.findAll({
+      raw: true,
       where: {
-        email: 12
-      }
+        email: email,
+      },
     });
-    throw new Error("Method not implemented.");
+    
+    console.log(user);
+    return user[0];
   }
   async getUserByEmailAndPassword(email: string, password: string): Promise<IUser> {
-    const user = await this.usr.findAll({
-      where: {
-        email: 12,
-        password: 'active'
-      }
-    });
+    // console.log("getUserByEmailAndPassword getUserByEmailAndPassword");
 
-    // 🚀 Talk to your real database here
-    throw new Error("Method not implemented.");
+    const user = await userModel.findAll({
+      where: {
+        email: email,
+        password: password,
+      },
+    });
+    // console.log(user);
+
+    return user[0];
   }
   async createUser(user: IUser): Promise<IUser> {
     // 🚀 Talk to your real database here

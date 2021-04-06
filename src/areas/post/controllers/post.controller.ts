@@ -106,8 +106,12 @@ class PostController implements IController {
   };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
-  private getUserPosts = (req: Request, res: Response) => {
-    const posts = this._postService.getUserPosts(req.user.username);
+  private getUserPosts = async (req: Request, res: Response) => {
+
+    console.log('is getUserPosts called?');
+    console.log(req.user.id);
+    
+    const posts = await this._postService.getUserPosts(req.user.id);
     const user = req.user;
     // res.render("post/views/posts", { posts, user });
     res.render("post/views/NEW_VIEW/posts", { posts, user });
@@ -163,20 +167,18 @@ class PostController implements IController {
     res.redirect("back");
   };
 
-  private addPost = (req: Request, res: Response, next: NextFunction) => {
-    const post_obj: IPost = {
-      id: uuidv4(),
+  private addPost = async (req: Request, res: Response, next: NextFunction) => {
+console.log('addPost addPost addPost');
+console.log(req.user);
+
+
+    const req_data = {
       message: req.body.postText,
       username: req.user.username,
-      createdAt: new Date(),
-      commentList: [],
-      likes: [],
-      reposts: 0,
-      comments: 0,
-    };
+      user_id: req.user.id
+    }
 
-    this._postService.addPost(post_obj);
-
+   await this._postService.addPost(req_data);
     next();
   };
 }

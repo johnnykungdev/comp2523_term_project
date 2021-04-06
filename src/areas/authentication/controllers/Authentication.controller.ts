@@ -25,9 +25,9 @@ class AuthenticationController implements IController {
   private initializeRoutes() {
     this.router.get(`${this.path}/register`, this.ensureUnauthenticated, this.showRegistrationPage);
     this.router.post(`${this.path}/register`, this.registration);
-    this.router.get(`${this.path}/login`, this.ensureUnauthenticated, this.showLoginPage);
+    // this.router.get(`${this.path}/login`, this.ensureUnauthenticated, this.showLoginPage);
     // FAKING LOGIN, TO REMOVE ONCE DONE and uncomment above instead
-    // this.router.get(`${this.path}/login`, this.login);
+    this.router.get(`${this.path}/login`, this.login);
 
     this.router.post(`${this.path}/login`, this.login);
     this.router.get(`${this.path}/logout`, this.logout);
@@ -55,7 +55,7 @@ class AuthenticationController implements IController {
 
   private login = (req: express.Request, res: express.Response, next) => {
     // FAKE LOGIN, TO REMOVE ONCE DONE, and use form instead
-    // req.body = { email: "james123@gmail.com", password: "james123" };
+    req.body = { email: "james123@gmail.com", password: "james123" };
 
     // passport.authenticate("local", {
     //   successRedirect: "/posts",

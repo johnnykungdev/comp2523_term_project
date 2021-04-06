@@ -1,4 +1,4 @@
-import { MockAuthenticationService } from "../areas/authentication/services";
+import { AuthenticationService } from "../areas/authentication/services";
 import passport from "passport";
 import PassportConfig from "../areas/authentication/config/PassportConfig";
 import IUser from "../interfaces/user.interface";
@@ -21,6 +21,6 @@ module.exports = (app) => {
     }
   });
 
-  const localLogin = new PassportConfig(new MockAuthenticationService());
+  const localLogin = new PassportConfig(new AuthenticationService());
   passport.use(localLogin.strategy);
 };

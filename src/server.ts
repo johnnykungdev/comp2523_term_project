@@ -11,7 +11,7 @@ import { AuthenticationService } from "./areas/authentication/services/Authentic
 import { PostService, MockPostService } from "./areas/post/services";
 
 const server = new App([
-  new PostController(new MockPostService()),
+  new PostController(new PostService()),
   new AuthenticationController(new AuthenticationService()),
   new SearchController(),
   new IframeController(),

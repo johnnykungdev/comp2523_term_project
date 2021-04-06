@@ -46,7 +46,11 @@
               ><a
                 href="/posts/<%= post.username %>/<%= post.id %>"
                 class="text-grey-dark hover:no-underline hover:text-blue-light"
-                ><i class="fa fa-comment fa-lg mr-2"></i> <%= post.commentList.length %></a
+                ><i class="fa fa-comment fa-lg mr-2"></i> 
+                <% if (post.commentList) { %>
+                <%= post.commentList.length %>
+                <% } %>
+                </a
               ></span
             >
             <span class="mr-8">
@@ -69,11 +73,14 @@
                 <input type="hidden" value="<%= post.username %>" name="poster_username" />
                 <input type="hidden" value="<%= post.id %>" name="post_id" />
                 <button type="submit" class="text-grey-dark hover:no-underline hover:text-red">
+                  <% if (post.likes) { %>
+
                   <% if (post.likes.includes(user.username)) { %>
                   <i class="fa fa-heart fa-lg mr-2"></i>
                   <% } else { %>
                   <i class="fa fa-heart-o fa-lg mr-2"></i>
                   <% } %> <%= post.likes.length %>
+                  <% } %>
                 </button></span
               >
             </form>

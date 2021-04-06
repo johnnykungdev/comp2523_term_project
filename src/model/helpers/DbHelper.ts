@@ -3,7 +3,7 @@ import IPost from "../../interfaces/post.interface";
 import IComment from "../../interfaces/comment.interface";
 import { database } from "../fakeDB";
 
-const arr = [{ users: { username: "james123" } }, { posts: { id: "abc3" } }, { commentList: { id: "abc4" } }];
+
 
 export class DbHelper {
   static recurseSelect(objs_arr: { [key: string]: { [key: string]: string } }[]) {
@@ -22,6 +22,9 @@ export class DbHelper {
     return objs_arr.reduce(recurse_loop, database);
   }
 }
+
+
+// const arr = [{ users: { username: "james123" } }, { posts: { id: "abc3" } }, { commentList: { id: "abc4" } }];
 
 // recurseSelect(arr).replies.push({
 //   id: "iamtheinevitable",
