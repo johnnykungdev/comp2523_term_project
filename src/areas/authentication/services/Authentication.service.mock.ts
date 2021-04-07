@@ -24,7 +24,7 @@ export class MockAuthenticationService implements IAuthenticationService {
       !UserHelper.select([{ username: form_obj.username }])[0] &&
       !UserHelper.select([{ email: form_obj.email }])[0]
     ) {
-      return UserHelper.createUser(form_obj);
+      return UserHelper.createUser(form_obj)[0];
     }
 
     return null;

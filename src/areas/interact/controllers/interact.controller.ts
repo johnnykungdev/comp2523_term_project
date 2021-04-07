@@ -3,15 +3,19 @@ import { PostHelper } from "../../../model/helpers/PostHelper";
 import { UserHelper } from "../../../model/helpers/UserHelper";
 import { InteractHelper } from "../../../model/helpers/InteractHelper";
 import IController from "../../../interfaces/controller.interface";
+import { InteractService } from "../services";
+
 import IPost from "../../../interfaces/post.interface";
 import IUser from "../../../interfaces/user.interface";
 
 class SearchController implements IController {
   public path = "/interact";
   public router = Router();
+  public _interact_service: InteractService;
 
-  constructor() {
+  constructor(interact_service: InteractService) {
     this.initializeRoutes();
+    this._interact_service = interact_service;
   }
 
   private ensureAuthenticated = function (req: Request, res: Response, next: NextFunction) {
@@ -32,75 +36,35 @@ class SearchController implements IController {
   }
 
   private async notifications(req: Request, res: Response, next: NextFunction) {
-    console.log("notifications notifications");
-
-    const user = req.user as IUser;
-    let notifications = UserHelper.select([{ username: user.username }])[0].notifications;
-    notifications.sort((a, b) => {
-      var dateA = new Date(a.createdAt);
-      var dateB = new Date(b.createdAt);
-      return dateB - dateA;
-    });
+    const notifications = await this._interact_service.notifications(req,res,next);
     res.send(notifications);
   }
 
   private async like(req: Request, res: Response, next: NextFunction) {
-    const like_notice = {
-      poster_username: req.body.poster_username,
-      post_id: req.body.post_id,
-      current_user: req.user.username,
-    };
-
-    await PostHelper.like(like_notice);
-
-    PostHelper.addNotification(like_notice, "liked");
-
+    await this._interact_service.like(req,res,next);
     res.redirect("back");
   }
 
-  private search(req: Request, res: Response, next: NextFunction) {
-    const query = req.query.query;
-    const userList: IUser[] = UserHelper.search([{ username: query }]);
-    const postList: IPost[] = PostHelper.search([{ message: query }]);
-    const user = req.user;
+  private async search(req: Request, res: Response, next: NextFunction) {
+    const result = await this._interact_service.search(req,res,next);
+    let userList = result.userList;
+    let postList = result.postList;
 
-    // console.log("userList");
-    // console.log(userList);
+    // res.render("interact/views/NEW_VIEW/search", { userList, postList, user });
+    res.render("interact/views/NEW_VIEW/search", { userList, postList, req.user });
 
-    // console.log("postList");
-    // console.log(postList);
-
-    res.render("interact/views/NEW_VIEW/search", { userList, postList, user });
   }
 
   private async follow_action(req: Request, res: Response, next: NextFunction) {
-    // console.log(req.body); //{ unfollow_user: 'james123' }
-    // console.log(UserHelper.select([{ username: req.user.username }]));
-    // console.log("following");
-    // console.log(UserHelper.select([{ username: req.user.username }])[0].following);
 
-    if (req.user.username != Object.values(req.body)[0]) {
-      if (Object.keys(req.body)[0] == "follow_user") {
-        await InteractHelper.follow(req.user.username, Object.values(req.body)[0]);
-      } else {
-        await InteractHelper.unfollow(req.user.username, Object.values(req.body)[0]);
-      }
-    }
+    await this._interact_service.follow_action(req, res, next);
 
     res.redirect("back");
   }
 
   private async repost(req: Request, res: Response, next: NextFunction) {
-    await InteractHelper.repost(req.user, req.body.username, req.body.post_id);
 
-    // res.redirect("back");
-    const repost_notice = {
-      poster_username: req.body.username,
-      post_id: req.body.post_id,
-      current_user: req.user.username,
-    };
-
-    PostHelper.addNotification(repost_notice, "reposted");
+    await this._interact_service.repost(req,res, next);
 
     res.end();
   }

@@ -25,9 +25,9 @@ class AuthenticationController implements IController {
   private initializeRoutes() {
     this.router.get(`${this.path}/register`, this.ensureUnauthenticated, this.showRegistrationPage);
     this.router.post(`${this.path}/register`, this.registration);
-    // this.router.get(`${this.path}/login`, this.ensureUnauthenticated, this.showLoginPage);
+    this.router.get(`${this.path}/login`, this.ensureUnauthenticated, this.showLoginPage);
     // FAKING LOGIN, TO REMOVE ONCE DONE and uncomment above instead
-    this.router.get(`${this.path}/login`, this.login);
+    // this.router.get(`${this.path}/login`, this.login);
 
     this.router.post(`${this.path}/login`, this.login);
     this.router.get(`${this.path}/logout`, this.logout);
@@ -55,13 +55,7 @@ class AuthenticationController implements IController {
 
   private login = (req: express.Request, res: express.Response, next) => {
     // FAKE LOGIN, TO REMOVE ONCE DONE, and use form instead
-    req.body = { email: "james123@gmail.com", password: "james123" };
-
-    // passport.authenticate("local", {
-    //   successRedirect: "/posts",
-    //   failureRedirect: "/auth/login",
-    //   failureFlash: true,
-    // })(req, res, next);
+    // req.body = { email: "james123@gmail.com", password: "james123" };
 
     passport.authenticate("local", function (err, user) {
       if (err) {
@@ -69,11 +63,6 @@ class AuthenticationController implements IController {
 
         return next(err); // will generate a 500 error
       }
-      // to handle the error here later
-      // if (!user) {
-      //   return res.send({ success: false, message: "authentication failed" });
-      // }
-
       req.login(user, (loginErr) => {
         if (loginErr) {
           return next(loginErr);
@@ -88,7 +77,7 @@ class AuthenticationController implements IController {
     const user = await this._auth_service.createUser(req.body);
 
     if (user) {
-      req.flash("info", `Sucessful signup, ${user[0].username}. Please login now`);
+      req.flash("info", `Sucessful signup, ${user.username}. Please login now`);
     } else {
       next(new EmailAlreadyExistsException(req.body.email, req.body.username));
     }

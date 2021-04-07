@@ -9,6 +9,8 @@ const postModel = postModelFunc(sequelize, DataTypes);
 
 import likeModelFunc from "../../../../models/like";
 const likeModel = likeModelFunc(sequelize, DataTypes);
+import cmtModelFunc from "../../../../models/comment";
+const cmtModel = cmtModelFunc(sequelize, DataTypes);
 
 
 import { v4 as uuidv4 } from "uuid";
@@ -46,8 +48,19 @@ export class PostService implements IPostService {
           post_id: posts[i].id,
         },
       });
+
+      const commentList = await cmtModel.findAll({
+        raw: true,
+        where: {
+          post_id: posts[i].id,
+        },
+      });
+
       posts[i]["likes"] = likes;
+      posts[i]["commentList"] = commentList;
+
     }
+
     
     return posts;
   }
