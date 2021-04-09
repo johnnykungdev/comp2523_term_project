@@ -5,6 +5,9 @@ import { MockAuthenticationService } from "./areas/authentication/services/Authe
 import { PostService, MockPostService } from "./areas/post/services";
 import { SearchController } from "./areas/search/controllers/search.controller";
 import { MockSearchService } from "./areas/search/services/Search.service.mock";
+import * as dotenv from "dotenv"
+dotenv.config({ path: __dirname + '/.env' })
+
 
 
 const server = new App([

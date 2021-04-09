@@ -8,8 +8,7 @@
     "start": "node ./dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "copy-files": "copyfiles -u 1 src/*.ejs src/**/*.ejs src/*/*/*.ejs src/*/*/*.*.ejs dist/",
-    "build": "npm run clean && tsc && npm run copy-files",
-    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts"
+    "build": "npm run clean && tsc && npm run copy-files"
   },
   "prettier": {
     "printWidth": 120
@@ -31,6 +30,7 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "firebase-admin": "^9.6.0",
     "ioredis": "^4.23.0",
     "morgan": "^1.10.0",
     "nanoid": "^3.1.20",
