@@ -24,7 +24,8 @@ const database: IDatabase = {
             {
               id: "abc2",
               createdAt: "2012-01-09T11:25:13Z",
-              userId: "billgates",
+              userId: "1",
+              username: "billgates",
               message: "this is some random comment",
             },
           ],

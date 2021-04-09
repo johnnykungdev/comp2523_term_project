@@ -29,11 +29,12 @@ export class MockPostService implements IPostService {
 
   findById(id: string): IPost {
     // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+    console.log(id)
+    return DbHelper.findOne({ type: "posts", conditionType: "id", condition: id})
   }
-  addCommentToPost(message: { id: string; createdAt: string; userId: string; message: string }, postId: string): void {
+  addCommentToPost(comment: { id: string; createdAt: string; userId: string; message: string }, postId: string): void {
     // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+    DbHelper.insertOne({type: "posts", conditionType: "id", condition: postId}, {type: "commentList", newContent: comment})
   }
 
   sortPosts(posts: IPost[]): IPost[] {
