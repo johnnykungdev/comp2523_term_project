@@ -81,7 +81,7 @@ const database: IDatabase = {
           ],
         },
       ],
-      following: [],
+      following: ["1"],
       reposts: [],
     },
     {

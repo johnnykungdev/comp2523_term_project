@@ -49,6 +49,7 @@ export class DbHelper {
   }
 
 
+
   static insertComment(userId, postId, comment) {
     const matchedUser = database.users.find(user => user.id)
     if (matchedUser) {
@@ -146,4 +147,5 @@ export class DbHelper {
 
 
   }
+
 }
