@@ -4,7 +4,6 @@ import IPostService from "../services/IPostService";
 import { post } from "../../../model/fakeDB";
 import IUser from "../../../interfaces/user.interface";
 import IPost from '../../../interfaces/post.interface';
-import { Request, Request } from "node-fetch";
 
 class PostController implements IController {
   public path = "/posts";
