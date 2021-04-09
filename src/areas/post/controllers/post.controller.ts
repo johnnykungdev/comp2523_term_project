@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction, Router } from "express";
 import IController from "../../../interfaces/controller.interface";
 import IPostService from "../services/IPostService";
-import { post } from "../../../model/fakeDB";
 import IUser from "../../../interfaces/user.interface";
+import IPost from '../../../interfaces/post.interface';
 
 class PostController implements IController {
   public path = "/posts";
@@ -17,7 +17,7 @@ class PostController implements IController {
   private initializeRoutes() {
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPostById);
-    this.router.get(`${this.path}/:id/delete`, this.deletePost);
+    this.router.post(`${this.path}/delete`, this.deletePost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}`, this.createPost);
   }
@@ -33,14 +33,50 @@ class PostController implements IController {
   };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
-  private getPostById = async (request: Request, res: Response, next: NextFunction) => {
+  private getPostById = async (req: Request, res: Response, next: NextFunction) => {
+    const post = this._postService.findById(req.params.id)
+    console.log("post", post)
     res.render("post/views/post", { post });
   };
 
   // 🚀 These post methods needs to be implemented by you
-  private createComment = async (req: Request, res: Response, next: NextFunction) => {};
+
+  private createComment = async (req: Request, res: Response, next: NextFunction) => {
+    const postId = req.params.id
+    console.log(req.body)
+    
+    function buildComment(userId: string, commentText: string): any {
+      const commentId = (Math.random() * 10000000000).toFixed(0)
+      return {
+        id: `${commentId}`,
+        createdAt: new Date(),
+        userId: userId,
+        username: req.user.username,
+        message: commentText
+      }
+    }
+
+    const newComment = buildComment(req.user.id, req.body.commentText)
+    
+    this._postService.addCommentToPost(newComment, postId)
+    res.redirect(`${this.path}/${postId}`)
+  };
   private createPost = async (req: Request, res: Response, next: NextFunction) => {};
   private deletePost = async (req: Request, res: Response, next: NextFunction) => {};
+
+  private createComment = async (req: Request, res: Response, next: NextFunction) => {};
+  private createPost = async (req: Request, res: Response, next: NextFunction) => {
+    const newPost: IPost = this._postService.buildNewPost(req);
+    this._postService.addPost(newPost, req.user.id)
+    res.redirect("/posts")
+  };
+  private deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    const deletedPostId = req.body.postToDelete
+    const userId = req.user.id
+    this._postService.deletePost(userId, deletedPostId)
+    res.redirect("/posts")
+  };
+
 }
 
 export default PostController;

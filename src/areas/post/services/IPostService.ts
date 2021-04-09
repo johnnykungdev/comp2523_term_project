@@ -12,6 +12,10 @@ export default interface IPostService {
 
   addCommentToPost(
     message: { id: string; createdAt: string; userId: string; message: string },
-    postId: string
+    postId: string,
+    // userId: string
   ): IPost | void;
+
+  buildNewPost(req: Request): IPost;
+  deletePost(userId: string, postId: string) : void;
 }

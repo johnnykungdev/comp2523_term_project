@@ -4,6 +4,7 @@ interface IPost {
   id: string;
   message: string;
   userId: string;
+  username: string;
   createdAt: Date;
   commentList?: Array<IComment>;
   likes: number;

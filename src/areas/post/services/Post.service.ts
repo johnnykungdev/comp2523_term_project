@@ -24,4 +24,18 @@ export class PostService implements IPostService {
     // 🚀 Implement this yourself.
     throw new Error("Method not implemented.");
   }
+
+  buildNewPost(req: Request) {
+    return {
+      id: `${(Math.random() * 100000000).toFixed(0)}`,
+      userId: req.user.id,
+      username: req.user.username,
+      message: req.body.postText,
+      createdAt: new Date(),
+      commentList: [],
+      likes: 0,
+      reposts: 0,
+      comments: 0
+    }
+  }
 }
