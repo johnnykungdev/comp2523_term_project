@@ -59,6 +59,17 @@ export class DbHelper {
     console.log(matchedUser.posts)
   }
 
+  //delete 
+  static deletePost(userId, postId) { 
+    const matchedUser = database.users.find(user => user.id === userId)
+    if (matchedUser) {
+      const deletedPostIndex = matchedUser.posts.findIndex(post => post.id === postId)
+      matchedUser.posts.splice(deletedPostIndex, 1)
+    } else {
+      throw new Error("User not found.")
+    }
+
+
   static getFullName(user: object): string {
     return (user["firstName"] + " " + user["lastName"]).toLowerCase()
   }

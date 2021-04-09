@@ -16,4 +16,5 @@ export default interface IPostService {
   ): IPost | void;
 
   buildNewPost(req: Request): IPost;
+  deletePost(userId: string, postId: string) : void;
 }
