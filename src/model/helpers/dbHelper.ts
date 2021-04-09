@@ -48,6 +48,17 @@ export class DbHelper {
     return objs_arr.reduce(recurse_loop, database);
   }
 
+
+  static insertPost(userId, newPost) {
+    const matchedUser = database.users.find(user => user.id === userId)
+    if (matchedUser) {
+        matchedUser.posts.push(newPost)
+    } else {
+      throw new Error("User not found.")
+    }
+    console.log(matchedUser.posts)
+  }
+
   static getFullName(user: object): string {
     return (user["firstName"] + " " + user["lastName"]).toLowerCase()
   }
@@ -73,5 +84,6 @@ export class DbHelper {
       }
     }
     return userPosts
+
   }
 }

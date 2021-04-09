@@ -14,4 +14,6 @@ export default interface IPostService {
     message: { id: string; createdAt: string; userId: string; message: string },
     postId: string
   ): IPost | void;
+
+  buildNewPost(req: Request): IPost;
 }
