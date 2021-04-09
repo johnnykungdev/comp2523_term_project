@@ -260,14 +260,14 @@
               <div>
                 <span class="font-bold"
                   ><a href="#" class="text-black"
-                    ><%= post.userId %></a
+                    ><%= post.username %></a
                   ></span
                 >
                 <span class="text-grey-dark">&middot;</span>
                 <span class="text-grey-dark"><%= post.createdAt %></span>
                 <span class="inline-block">
-                  <form action="/delete" method="post">
-                    <input type="hidden" value="<%= post.postId %>" name="postToDelete" />
+                  <form action="/posts/delete" method="post">
+                    <input type="hidden" value="<%= post.id %>" name="postToDelete" />
                     <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
                   </form>
                   

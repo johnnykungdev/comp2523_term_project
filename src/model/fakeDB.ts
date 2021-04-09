@@ -13,8 +13,9 @@ const database: IDatabase = {
       posts: [
         {
           id: "abc1",
-          userId: "billgates",
-          message: "Microsoft is a nice company",
+          userId: "1",
+          username: "billgates",
+          message: "Microsoft is a great company",
           createdAt: new Date(),
           likes: 3,
           reposts: 5,
@@ -44,6 +45,7 @@ const database: IDatabase = {
         {
           id: "abc3",
           userId: "james123",
+          username: "james123",
           message: "A post by james",
           createdAt: new Date(),
           likes: 30,
@@ -61,7 +63,10 @@ const database: IDatabase = {
         {
           id: "abc5",
           userId: "james123",
+
+          username: "james123",
           message: "Nice weather today in Vancouver",
+
           createdAt: new Date(),
           likes: 30,
           reposts: 50,
@@ -72,6 +77,35 @@ const database: IDatabase = {
               userId: "billgates",
               createdAt: "2012-02-05T05:13:24Z",
               message: "The weather is always nice when you're rich like me.",
+            },
+          ],
+        },
+      ],
+      following: [],
+      reposts: [],
+    },
+    {
+      id: "3",
+      email: "bob@gmail.com",
+      password: "bob123",
+      firstName: "Bill",
+      lastName: "bob",
+      username: "billbob",
+      posts: [
+        {
+          id: "abc7",
+          userId: "billbob",
+          message: "Microsoft is a bad company. Do you agree james?",
+          createdAt: new Date(),
+          likes: 3,
+          reposts: 5,
+          comments: 0,
+          commentList: [
+            {
+              id: "abc8",
+              createdAt: "2012-01-09T11:25:13Z",
+              userId: "billbob",
+              message: "this is some random comment -bob",
             },
           ],
         },

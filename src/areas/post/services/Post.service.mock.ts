@@ -4,9 +4,11 @@ import { DbHelper } from "../../../model/helpers/dbHelper";
 
 // ⭐️ Feel free to change this class in any way you like. It is simply an example...
 export class MockPostService implements IPostService {
-  addPost(post: IPost, username: string): void {
-    // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+  addPost(post: IPost, userId: string): void {
+    //db helper, can switch to real db services later
+    DbHelper.insertPost(userId, post)
+
+    // throw new Error("Method not implemented.");
   }
   getAllPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
@@ -38,5 +40,23 @@ export class MockPostService implements IPostService {
   sortPosts(posts: IPost[]): IPost[] {
     // 🚀 Implement this yourself.
     throw new Error("Method not implemented.");
+  }
+
+  buildNewPost(req: Request) {
+    return {
+      id: `${(Math.random() * 100000000).toFixed(0)}`,
+      userId: req.user.id,
+      username: req.user.username,
+      message: req.body.postText,
+      createdAt: new Date(),
+      commentList: [],
+      likes: 0,
+      reposts: 0,
+      comments: 0
+    }
+  }
+
+  deletePost(userId: string, postId: string) {
+    DbHelper.deletePost(userId, postId)
   }
 }
