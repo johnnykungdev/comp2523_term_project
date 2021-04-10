@@ -33,7 +33,7 @@ function createPost(msg, id) {
           <div class="pb-2 flex">
             <span class="mr-8"
               ><a
-                href="/iframe/post/${id}"
+                href="/iframe/post"
                 id="n_cmts"
                 class="text-grey-dark hover:no-underline hover:text-blue-light flex"
                 ><i class="fa fa-comment fa-lg mr-2"></i>

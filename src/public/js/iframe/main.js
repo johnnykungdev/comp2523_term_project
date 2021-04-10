@@ -17,13 +17,14 @@ $(document).ready(function () {
 
   function addBin(repost) {
     if(!repost) { //if original new post
-      $("#posts .post_content:first-child").append(`<div>
+      console.log('stopper');
+      $("#posts .post_content").first().append(`<div>
       <i class="oop_remove_post fa fa-trash"></i>
     </div>`);
 
   }
   else {
-      $("#posts .post_content:first-child .oop_remove_post").remove()
+      $("#posts .post_content .oop_remove_post").first().remove()
     }
   }
 
@@ -108,7 +109,8 @@ $(document).ready(function () {
   }
 
   // Add comment
-  $("#comment_submit").on("click", () => {
+  $(document).on("submit", ".comment_form", function (e) {
+    e.preventDefault();
     let cmt = $("#comment_textarea").val();
 
     let cmt_string = `
