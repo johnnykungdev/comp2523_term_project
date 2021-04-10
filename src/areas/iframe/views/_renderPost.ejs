@@ -39,12 +39,12 @@
         </div>
         <div>
           <div class="mb-4">
-            <p class="mb-6"><%= post.message %></p>
+            <p class="mb-6 post_message"><%= post.message %></p>
           </div>
           <div class="pb-2 flex">
             <span class="mr-8"
               ><a
-                href="/iframe/post/<%= post.id %>"
+                href="/iframe/post"
                 id="n_cmts"
                 class="text-grey-dark hover:no-underline hover:text-blue-light flex"
                 ><i class="fa fa-comment fa-lg mr-2"></i>
@@ -62,7 +62,7 @@
                   style="transition: all 0.15s ease"
                   type="submit"
                 >
-                  <i class="fa fa-retweet fa-lg mr-2"></i> <%= post.reposts %>
+                  <i class="fa fa-retweet fa-lg mr-2"></i><span class="repost_n"><%= post.reposts %></span> 
                 </button>
               </form>
             </span>

@@ -28,7 +28,7 @@ function createPost(msg, id) {
         </div>
         <div>
           <div class="mb-4">
-            <p class="mb-6">${msg}</p>
+            <p class="post_message mb-6">${msg}</p>
           </div>
           <div class="pb-2 flex">
             <span class="mr-8"
@@ -51,7 +51,7 @@ function createPost(msg, id) {
                   style="transition: all 0.15s ease"
                   type="submit"
                 >
-                  <i class="fa fa-retweet fa-lg mr-2"></i> 0
+                  <i class="fa fa-retweet fa-lg mr-2"></i> <span class="repost_n">0</span>
                 </button>
               </form>
             </span>
@@ -65,9 +65,7 @@ function createPost(msg, id) {
         </div>
       </div>
 
-      <div>
-        <i class="oop_remove_post fa fa-trash"></i>
-      </div>
+
     </div>`;
 
   return post_str;
