@@ -6,6 +6,7 @@
     <title>Login</title>
     <meta name="description" content="" />
     <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/iframe.css">
   </head>
   <body class="bg-white font-family-karla h-screen">
     <div class="w-full flex flex-wrap">
@@ -16,7 +17,7 @@
         </div>
 
         <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
-          <p class="text-center text-3xl">Welcome back.</p>
+          <p class="text-center text-3xl">Welcome back...</p>
           <% if (message) { %>
           <h3><%= message %></h3>
           <% } %>
@@ -60,7 +61,8 @@
 
       <!-- Image Section -->
       <div class="w-1/2 shadow-2xl">
-        <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0" />
+        <!-- <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0" /> -->
+        <iframe src="http://localhost:5000/iframe/index" frameborder="0"></iframe>
       </div>
     </div>
   </body>

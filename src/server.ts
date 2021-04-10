@@ -9,8 +9,10 @@ import * as dotenv from "dotenv"
 dotenv.config({ path: __dirname + '/.env' })
 
 
+import IframeController from "./areas/iframe/controllers/Iframe.controller";
 
 const server = new App([
+  new IframeController(),
   new AuthenticationController(new MockAuthenticationService()),
   new PostController(new MockPostService()),
   new SearchController(new MockSearchService()),

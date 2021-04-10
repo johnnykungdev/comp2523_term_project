@@ -1,0 +1,143 @@
+<head>
+  <link rel="stylesheet" href="/css/iframe.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<header class="flex">
+  <div class="flex items-center space-x-3">
+    <span class="p-2 text-xl font-semibold tracking-wider uppercase"> devHouse </span>
+  </div>
+  <h2 class="big flex items-center"><a href="/iframe/index">Home page</a></h2>
+  <div class="items-center hidden px-2 space-x-2 md:flex-1 md:flex md:mr-auto md:ml-5">
+    <span>
+      <svg
+        class="w-5 h-5 text-gray-500"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </span>
+    <!-- <form action="/interact/search"> -->
+    <input
+      type="text"
+      name="query"
+      placeholder="Search"
+      class="oop_search px-4 py-3 rounded-md hover:bg-gray-100 lg:max-w-sm md:py-2 md:flex-1 focus:outline-none md:focus:bg-gray-100 md:focus:shadow md:focus:border"
+    />
+    <!-- <button hidden type="submit"></button> -->
+    <!-- </form> -->
+  </div>
+
+  <!-- Navbar right -->
+  <div class="oop_header_right_items relative flex items-center space-x-3">
+    <!-- Search button -->
+    <button class="p-2 bg-gray-100 rounded-full md:hidden focus:outline-none focus:ring hover:bg-gray-200">
+      <svg
+        class="w-6 h-6 text-gray-500"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+    </button>
+
+    <div class="oop-dd-btn items-center hidden space-x-3 md:flex">
+      <!-- Notification Button -->
+      <div class="relative" x-data="{ isOpen: false }">
+        <!-- red dot -->
+        <div id="notification_bubble"></div>
+
+        <button class="oop-notice-btn p-2 bg-gray-100 rounded-full hover:bg-gray-200 focus:outline-none focus:ring">
+          <svg
+            class="w-6 h-6 text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+            />
+          </svg>
+        </button>
+
+        <!-- Dropdown card -->
+        <!-- <div
+            class="oop-dd absolute w-48 max-w-md mt-3 transform bg-white rounded-md shadow-lg -translate-x-3/4 min-w-max"
+          >
+            <div class="p-4 font-medium border-b">
+              <span class="text-gray-800">Notification</span>
+            </div>
+            <ul id="oop-notice-dd" class="flex flex-col p-2 my-2 space-y-1"></ul>
+            <div class="flex items-center justify-center p-4 text-blue-700 underline border-t">
+              <a href="#">See All</a>
+            </div>
+          </div> -->
+      </div>
+    </div>
+
+    <!-- avatar button -->
+    <div class="oop-dd-btn relative" x-data="{ isOpen: false }">
+      <button class="oop-profile-btn p-1 bg-gray-200 rounded-full focus:outline-none focus:ring">
+        <img
+          class="object-cover w-8 h-8 rounded-full"
+          src="https://user-images.githubusercontent.com/76543451/103982284-0a6f0b00-5138-11eb-872b-0b9e70fc5c25.gif"
+          alt="john doe"
+        />
+      </button>
+      <!-- green dot -->
+      <div class="absolute right-0 p-1 bg-green-400 rounded-full bottom-3 animate-ping"></div>
+      <div class="absolute right-0 p-1 bg-green-400 border border-white rounded-full bottom-3"></div>
+
+      <!-- Dropdown card -->
+      <!-- <div
+          class="oop-dd oop-profile-dd z-50 absolute mt-3 transform -translate-x-full bg-white rounded-md shadow-lg min-w-max"
+        >
+          <div class="flex flex-col p-4 space-y-1 font-medium border-b">
+            <span class="text-gray-800">John Doe</span>
+            <span class="text-sm text-gray-400">john.doe@gmail.com</span>
+          </div>
+          <ul class="flex flex-col p-2 my-2 space-y-1">
+            <li>
+              <a href="#" class="block px-2 py-1 transition no-underline rounded-md hover:bg-gray-100">Settings</a>
+            </li>
+            <li>
+              <a href="/auth/logout" class="block px-2 py-1 transition no-underline rounded-md hover:bg-gray-100"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div> -->
+    </div>
+    <script src="/js/iframe/functions.js"></script>
+
+    <script src="/js/iframe/main.js"></script>
+    <!-- <script src="/js/notifications.js"></script> -->
+  </div>
+</header>
