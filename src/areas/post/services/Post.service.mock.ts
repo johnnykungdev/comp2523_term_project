@@ -1,9 +1,46 @@
 import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 import { DbHelper } from "../../../model/helpers/dbHelper";
+import IUser from "../../../interfaces/user.interface";
+
 
 // ⭐️ Feel free to change this class in any way you like. It is simply an example...
 export class MockPostService implements IPostService {
+
+  private getGroupPosts(user_group): IPost[] {
+    let allPosts: IPost[] = [];
+    for (let user of user_group) {
+      allPosts.push(...user.posts);
+    }
+
+    console.log("getGroupPosts all posts");
+    console.log(allPosts);
+
+    return allPosts;
+  }
+
+  private getFollowedPosts(username) {
+    const followed_users_names: string[] = DbHelper.select([{ username: username }])[0].following;
+    console.log('followed_users_names');
+    console.log(followed_users_names);
+    
+    let followed_users: IUser[] = [];
+
+    if (followed_users_names.length != 0) {
+      for (let name of followed_users_names) {
+
+        let each_followed_user = DbHelper.select([{ username: name }])[0];
+
+        followed_users.push(each_followed_user);
+      }
+
+      return this.getGroupPosts(followed_users);
+    }
+
+    return [];
+  }
+
+
   addPost(post: IPost, userId: string): void {
     //db helper, can switch to real db services later
     DbHelper.insertPost(userId, post)
@@ -14,17 +51,20 @@ export class MockPostService implements IPostService {
     // 🚀 Implement this yourself.
 
     console.log("getAllPosts " + username);
-
+    let merged_posts = [];
     const user = DbHelper.select([{ username: username }]);
     const ownposts = user[0].posts;
+    const followed_posts = this.getFollowedPosts(username);
 
-    ownposts.sort((a, b) => {
+    merged_posts.push(...ownposts, ...followed_posts);
+
+    merged_posts.sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
       return dateB.getTime() - dateA.getTime();
     });
 
-    return ownposts;
+    return merged_posts;
   }
 
   findById(id: string): IPost {
