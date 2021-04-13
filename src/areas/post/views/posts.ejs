@@ -26,6 +26,7 @@
     >
       <div class="w-full bg-white mb-4">    
         <%- include('../../_ejs_partials/header.ejs') %>
+
         
         <div class="p-5">
           <div class="bg-white  mx-auto w-full sm:w-11/12 md:w-8/12 lg:w-6/12 rounded">
@@ -47,10 +48,12 @@
           </div>
           
         <!-- Post begins -->
+
         <section class="posts">
           <% posts.forEach(function(post){ %> <%- include('../../_ejs_partials/renderPost.ejs', {post: post, user:
-          user}); %> <% });%>
+          user, likes: post.likes}); %> <% });%>
         </section>
+
         <!-- Post ends -->
       </div>
     </div>
