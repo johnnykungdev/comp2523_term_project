@@ -43,7 +43,7 @@ class PostController implements IController {
   private getPostById = async (req: Request, res: Response, next: NextFunction) => {
     const post = this._postService.findById(req.params.id)
     console.log("post", post)
-    res.render("post/views/post", { post });
+    res.render("post/views/post", { post, user:req.user  });
   };
 
   // 🚀 These post methods needs to be implemented by you
