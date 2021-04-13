@@ -23,10 +23,23 @@ class AuthenticationController implements IController {
     }
   };
 
+  private ensureUnauthenticated = function (req: Request, res: Response, next: NextFunction) {
+    if (typeof req.user != "undefined") {
+      res.redirect("/posts");
+    } else {
+      return next();
+    }
+  };
+
+
   private initializeRoutes() {
-    this.router.get(`${this.path}/register`, this.showRegistrationPage);
+    this.router.get(`${this.path}/register`, this.ensureUnauthenticated, this.showRegistrationPage);
     this.router.post(`${this.path}/register`, this.registration);
-    this.router.get(`${this.path}/login`, this.showLoginPage);
+
+    // this.router.get(`${this.path}/login`, this.ensureUnauthenticated, this.showLoginPage);
+    // FAKING LOGIN, TO REMOVE ONCE DONE and uncomment above instead
+    this.router.get(`${this.path}/login`, this.login);
+
     this.router.post(`${this.path}/login`, this.login);
     this.router.get(`${this.path}/logout`, this.logout);
     this.router.get(`${this.path}/logout`, this.logout);
@@ -43,6 +56,9 @@ class AuthenticationController implements IController {
 
   // 🔑 These Authentication methods needs to be implemented by you
   private login = (req: Request, res: Response, next: NextFunction) => {
+    // FAKE LOGIN, TO REMOVE ONCE DONE, and use form instead
+    req.body = { email: "james123@gmail.com", password: "james123" };
+
     passport.authenticate("local", function (err, user) {
       if (err) {
         return next(err);

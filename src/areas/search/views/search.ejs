@@ -17,6 +17,10 @@
   <section class="h-screen w-screen bg-gray-200 flex flex-col-reverse sm:flex-row min-h-0 min-w-0 overflow-hidden">
     <main class="sm:h-full flex-1 flex flex-col min-h-0 min-w-0 overflow-auto">
       <div id="menu" class="container mx-auto px-4 lg:pt-24 lg:pb-34">
+
+
+        <%- include('../../_ejs_partials/header.ejs') %>
+
         <div class="flex flex-wrap text-center justify-center">
           <div class="w-full lg:w-6/12 px-4">
             <h2 class="text-4xl font-semibold text-black">Users</h2>
@@ -41,11 +45,11 @@
                 </p>
               </div>
               <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
-                <% const userExists=loggedInUser.following.find(u=> u === user.id)
+                <% const userExists=loggedInUser.following.find(u=> u === user.username)
                   if(userExists){
                   %>
                   <form action="/unfollow">
-                    <input type="hidden" value="<%= user.id %>" name="followId" />
+                    <input type="hidden" value="<%= user.username %>" name="follow_username" />
                     <button
                       class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                       type="submit" style="transition: all 0.15s ease">
@@ -54,7 +58,7 @@
                   </form>
                   <% } else { %>
                     <form action="/follow">
-                      <input type="hidden" value="<%= user.id %>" name="followId" />
+                      <input type="hidden" value="<%= user.username %>" name="follow_username" />
                       <button
                         class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                         type="submit" style="transition: all 0.15s ease">
@@ -78,30 +82,8 @@
             </p>
           </div>
         </div>
-        <% userPosts.forEach(userPost=> { %>
-          <div class="flex flex-wrap mt-12 justify-center">
-            <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4">
-              <div class="col-span-4 sm:col-span-5 xl:col-span-5">
-                <h3 class="font-semibold text-black">
-                  <%= userPost.name %>
-                </h3>
-                <% userPost.posts.forEach(post=> { %>
-                  <p>
-                    <%= post %>
-                  </p>
-                  <% }) %>
-              </div>
-
-              <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic">
-                <button
-                  class="text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                  type="button" style="transition: all 0.15s ease">
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          <% }) %>
+        <% userPosts.forEach(function(post){ %> <%- include('../../_ejs_partials/renderPost.ejs', {post: post, user:
+          loggedInUser}); %> <% });%>
       </div>
     </main>
   </section>

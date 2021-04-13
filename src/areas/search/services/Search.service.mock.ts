@@ -1,4 +1,6 @@
 import { database } from "../../../model/fakeDB";
+import IPost from "../../../interfaces/post.interface";
+import { DbHelper } from "../../../model/helpers/dbHelper";
 
 
 export class MockSearchService {
@@ -17,21 +19,33 @@ export class MockSearchService {
   }
 
   getUserPostsByKeyWord(keyWord: string): object {
-    const userPosts = []
-    for (const dbUser of this._db) {
-      const user = {}
-      user["name"] = dbUser["firstName"] + " " + dbUser["lastName"]
-      const messageList = []
-      for (const post of dbUser.posts) {
-        if ((post.message).toLowerCase().includes(keyWord.toLowerCase())) {
-          messageList.push(post.message)
-        }
-      }
-      if (messageList.length > 0) {
-        user["posts"] = messageList
-        userPosts.push(user)
-      }
+    let foundPosts = []
+    // for (const dbUser of this._db) {
+    //   const user = {}
+    //   user["name"] = dbUser["firstName"] + " " + dbUser["lastName"]
+    //   const messageList = []
+    //   for (const post of dbUser.posts) {
+    //     if ((post.message).toLowerCase().includes(keyWord.toLowerCase())) {
+    //       messageList.push(post.message)
+    //     }
+    //   }
+    //   if (messageList.length > 0) {
+    //     user["posts"] = messageList
+    //     userPosts.push(user)
+    //   }
+    // }
+
+    let allPosts = [];
+    for (let user of this._db) {
+      allPosts.push(...user.posts);
     }
-    return userPosts
+
+    foundPosts = DbHelper.search([{message:keyWord}], allPosts);
+
+    console.log('foundPosts foundPosts foundPosts');
+    console.log(foundPosts);
+    
+
+    return foundPosts
   }
 }
