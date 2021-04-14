@@ -51,7 +51,7 @@ class SearchController implements IController {
     let postList = result.postList;
 
     // res.render("interact/views/NEW_VIEW/search", { userList, postList, user });
-    res.render("interact/views/NEW_VIEW/search", { userList, postList, req.user });
+    res.render("interact/views/NEW_VIEW/search", { userList, postList, user:req.user });
 
   }
 

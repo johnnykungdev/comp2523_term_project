@@ -12,7 +12,7 @@ const userModel = userModelFunc(sequelize, DataTypes);
 
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
-export class AuthenticationService implements IAuthenticationService {
+export class AuthenticationServiceMysql implements IAuthenticationService {
   // ⭐️ _db should be a reference to your real database driver
   readonly _db: any;
 

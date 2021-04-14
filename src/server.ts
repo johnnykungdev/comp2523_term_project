@@ -6,13 +6,13 @@ import AuthenticationController from "./areas/authentication/controllers/Authent
 import IframeController from "./areas/iframe/controllers/Iframe.controller";
 
 // import { MockAuthenticationService } from "./areas/authentication/services/Authentication.service.mock";
-import { AuthenticationService } from "./areas/authentication/services/Authentication.service";
+import { AuthenticationServiceMongoDb, AuthenticationServiceMysql } from "./areas/authentication/services";
 
-import { PostService, MockPostService } from "./areas/post/services";
+import { PostServiceMysql, MockPostServiceMongodb } from "./areas/post/services";
 
 const server = new App([
-  new PostController(new PostService()),
-  new AuthenticationController(new AuthenticationService()),
+  new PostController(new PostServiceMysql()),
+  new AuthenticationController(new AuthenticationServiceMysql()),
   new SearchController(),
   new IframeController(),
 ]);

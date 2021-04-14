@@ -42,7 +42,13 @@ class PostController implements IController {
   }
 
   private getAllPosts = (req: Request, res: Response) => {
-    const posts = PostHelper.getAllPosts(database.users);
+    // const posts = PostHelper.getAllPosts(database.users);
+    console.log('getAllPostszzzcontroller');
+    
+    console.log(req.user);
+    
+    const u_id = req.user._id;
+    this._postService.getUserPosts(u_id);
     const user = req.user as IUser;
 
     res.render("post/views/feeds", { posts, user });
@@ -92,7 +98,7 @@ class PostController implements IController {
     ];
 
     let returned_reference = await DbHelper.recurseSelect(arr);
-
+    
     // If sucessfully located comment
     if (returned_reference) {
       console.log("inside new commentReply");
@@ -107,12 +113,13 @@ class PostController implements IController {
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
   private getUserPosts = async (req: Request, res: Response) => {
+    
+    const posts = await this._postService.getUserPosts(req.user);
+    const user = req.user;
 
     console.log('is getUserPosts called?');
-    console.log(req.user.id);
-    
-    const posts = await this._postService.getUserPosts(req.user.id);
-    const user = req.user;
+    console.log(posts);
+    console.log('lllllllll');
     // res.render("post/views/posts", { posts, user });
     res.render("post/views/NEW_VIEW/posts", { posts, user });
   };

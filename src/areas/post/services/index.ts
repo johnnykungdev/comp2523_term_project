@@ -1,2 +1,4 @@
-export * from "./Post.service";
-export * from "./Post.service.mock";
+export * from "./Post.service.mysql";
+export * from "./Post.service.mongodb";
+export * from "./IPostService";
+

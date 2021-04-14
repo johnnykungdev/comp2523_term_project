@@ -16,8 +16,8 @@ const cmtModel = cmtModelFunc(sequelize, DataTypes);
 import { v4 as uuidv4 } from "uuid";
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
-export class PostService implements IPostService {
-  async addPost(req_data: {}, username: string): Promise<void> {
+export class PostServiceMysql implements IPostService {
+  async addPost(req_data, username: string): Promise<void> {
 
     const post_obj = {
       createdAt: new Date(),
@@ -32,12 +32,12 @@ export class PostService implements IPostService {
     let newPost = postModel.build(post_obj);
     await newPost.save();
   }
-  async getUserPosts(u_id: string): Promise<IPost[]> {
+  async getUserPosts(req_user): Promise<IPost[]> {
     console.log('getUserPosts service');
     const posts = await postModel.findAll({
       raw: true,
       where: {
-        user_id: u_id,
+        user_id: req_user.id,
       },
     });
 
@@ -60,7 +60,8 @@ export class PostService implements IPostService {
       posts[i]["commentList"] = commentList;
 
     }
-
+    console.log('stopperposts');
+    console.log(posts);
     
     return posts;
   }

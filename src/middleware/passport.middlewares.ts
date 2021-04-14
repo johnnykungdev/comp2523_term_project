@@ -1,4 +1,4 @@
-import { AuthenticationService } from "../areas/authentication/services";
+import { AuthenticationServiceMongoDb, AuthenticationServiceMysql } from "../areas/authentication/services";
 import passport from "passport";
 import PassportConfig from "../areas/authentication/config/PassportConfig";
 import IUser from "../interfaces/user.interface";
@@ -21,6 +21,6 @@ module.exports = (app) => {
     }
   });
 
-  const localLogin = new PassportConfig(new AuthenticationService());
+  const localLogin = new PassportConfig(new AuthenticationServiceMysql());
   passport.use(localLogin.strategy);
 };
