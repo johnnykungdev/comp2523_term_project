@@ -3,7 +3,7 @@ import { database } from "../fakeDB";
 export class DbHelper {
   static readonly _db = database.users;
 
-  static select(conditions: { [key: string]: string }[], db_level = this._db) {
+  static select(conditions: { [key: string]: string }[], db_level = this._db): any[] | null {
     return conditions.reduce((state, condition) => {
       state = state.filter((user) => {
         if (user[Object.keys(condition)[0]] == Object.values(condition)[0]) {
@@ -16,10 +16,10 @@ export class DbHelper {
     }, db_level);
   }
 
-  static search(conditions: { [key: string]: string }[], db_level = this._db) {
+  static search(conditions: { [key: string]: string }[], db_level = this._db):any[] | null {
     return conditions.reduce((state, condition) => {
       state = state.filter((user) => {
-        if (user[Object.keys(condition)[0]].includes(Object.values(condition)[0])) {
+        if (user[Object.keys(condition)[0]].toLowerCase().includes(Object.values(condition)[0].toLowerCase())) {
           return true;
         }
         return false;
@@ -97,6 +97,7 @@ export class DbHelper {
     recursiveFind(database, query)
     return finalResult
   }
+
 
   static insertPost(userId, newPost) {
     const matchedUser = database.users.find(user => user.id === userId)

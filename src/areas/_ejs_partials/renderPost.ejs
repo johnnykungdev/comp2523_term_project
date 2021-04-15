@@ -1,0 +1,68 @@
+
+    <div class="repost_content">
+        <div class="flex bg-gray-100 mb-4 rounded-lg">    
+          <div class="w-1/8 text-right pl-3 pt-3">
+            <div>
+              <a href="#"
+                ><img
+                  src="https://user-images.githubusercontent.com/76543451/103982284-0a6f0b00-5138-11eb-872b-0b9e70fc5c25.gif"
+                  alt="avatar"
+                  class="rounded-full h-12 w-12 mr-2"
+              /></a>
+            </div>
+          </div>
+    
+          <div class="w-7/8 p-3 pl-0">
+            <!-- <div class="text-xs text-grey-dark">Reposted</div> -->
+            <div class="flex justify-between">
+              <div>
+                <span class="font-bold"><a href="#" class="text-black"><%= post.username %></a></span>
+                <span class="text-grey-dark"><%= post.createdAt %></span>
+                </div>
+            </div>
+            <div>
+              <div class="mb-4">
+                <p class="mb-6"><%= post.message %></p>
+              </div>
+              <div class="pb-2 flex">
+                <span class="mr-8"
+                  ><a
+                    href="/posts/<%= post.id %>"
+                    class="text-grey-dark hover:no-underline hover:text-blue-light"
+                    ><i class="fa fa-comment fa-lg mr-2"></i> 
+                    <% if (post.commentList) { %>
+                    <%= post.commentList.length %>
+                    <% } %>
+                    </a
+                  ></span
+                >
+                <span class="mr-8">
+                  <!-- <form action="/interact/repost" method="post"> -->
+                  <form id="<%= post.id %>" class="oop_repost_form">
+                    <input hidden class="oop_post_username" type="text" name="username" value="<%= post.username %>" />
+                    <input hidden class="oop_post_id" type="text" name="post_id" value="<%= post.id %>" />
+    
+                    <button
+                      class="oop_repost_btn text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                      style="transition: all 0.15s ease"
+                      type="submit"
+                    >
+                      <i class="fa fa-retweet fa-lg mr-2"></i> <%= post.reposts %>
+                    </button>
+                  </form>
+                </span>
+                <span class="inline-block">
+                  <form action="/posts/<%= post.id %>/like" method="post">
+                    <input type="hidden" value="<%= user.id %>" name="userId" />
+                    <button type="submit" class="text-grey-dark hover:no-underline hover:text-red">
+                        <i class="fa fa-heart fa-lg mr-2"></i>
+                    </button> 
+                    <%= post.likes%>
+                  </form>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
