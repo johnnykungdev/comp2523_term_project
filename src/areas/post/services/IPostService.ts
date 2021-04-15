@@ -1,4 +1,6 @@
 import IPost from "../../../interfaces/post.interface";
+import { Request } from "express";
+
 
 // ⭐️ Feel free to change this interface in any way you like. It is simply an example...
 export default interface IPostService {
@@ -18,4 +20,7 @@ export default interface IPostService {
 
   buildNewPost(req: Request): IPost;
   deletePost(userId: string, postId: string) : void;
+  deleteRepost(userId: string, postId: string) : void;
+
+  repost(req: Request);
 }

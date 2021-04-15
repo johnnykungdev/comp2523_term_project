@@ -12,7 +12,7 @@ const database: IDatabase = {
       username: "billgates",
       posts: [
         {
-          id: "abc1",
+          id: "billgatesabc1",
           userId: "1",
           username: "billgates",
           message: "Microsoft is a great company",
@@ -43,7 +43,7 @@ const database: IDatabase = {
       lastName: "Smith",
       posts: [
         {
-          id: "abc3",
+          id: "james123abc3",
           userId: "james123",
           username: "james123",
           message: "A post by james",
@@ -61,7 +61,7 @@ const database: IDatabase = {
           ],
         },
         {
-          id: "abc5",
+          id: "james123abc5",
           userId: "james123",
 
           username: "james123",
@@ -93,8 +93,9 @@ const database: IDatabase = {
       username: "billbob",
       posts: [
         {
-          id: "abc7",
+          id: "billbobabc7",
           userId: "billbob",
+          username: "billbob",
           message: "Microsoft is a bad company. Do you agree james?",
           createdAt: new Date(),
           likes: 3,

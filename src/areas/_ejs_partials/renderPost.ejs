@@ -1,5 +1,4 @@
 
-    <div class="repost_content">
         <div class="flex bg-gray-100 mb-4 rounded-lg">    
           <div class="w-1/8 text-right pl-3 pt-3">
             <div>
@@ -18,6 +17,13 @@
               <div>
                 <span class="font-bold"><a href="#" class="text-black"><%= post.username %></a></span>
                 <span class="text-grey-dark"><%= post.createdAt %></span>
+                <span class="inline-block deletepost">
+                  <form action="/posts/delete" method="post">
+                    <input type="hidden" value="<%= post.id %>" name="postToDelete" />
+                    <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
+                  </form>
+                  
+                </span>
                 </div>
             </div>
             <div>
@@ -64,5 +70,4 @@
             </div>
           </div>
         </div>
-    </div>
     

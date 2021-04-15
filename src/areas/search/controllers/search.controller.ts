@@ -33,7 +33,7 @@ export class SearchController implements IController {
     const loggedInUser = this.loggedInUser = await this.mockSearchService.getUserById(user.id)
 
 
-    res.render("search/views/search", {users, userPosts, loggedInUser})
+    res.render("search/views/search", {user, users, userPosts, loggedInUser})
   };
 
   private follow = async (req: Request, res: Response, next: NextFunction) => {
