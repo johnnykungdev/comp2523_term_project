@@ -16,7 +16,7 @@ export class AuthenticationServiceMysql implements IAuthenticationService {
   // ⭐️ _db should be a reference to your real database driver
   readonly _db: any;
 
-  async findUserByEmail(email: String): Promise<IUser> {
+  async findUserByEmail(email: string) {
     console.log("findUserByEmail findUserByEmail");
     
     const user = await userModel.findAll({
@@ -29,7 +29,7 @@ export class AuthenticationServiceMysql implements IAuthenticationService {
     console.log(user);
     return user[0];
   }
-  async getUserByEmailAndPassword(email: string, password: string): Promise<IUser> {
+  async getUserByEmailAndPassword(email: string, password: string) {
     console.log("getUserByEmailAndPassword getUserByEmailAndPassword");
     console.log(password);
     
@@ -97,9 +97,7 @@ export class AuthenticationServiceMysql implements IAuthenticationService {
 
     
     await newUser.save();
-    console.log('newUser.save');
-    console.log(newUser.dataValues);
 
-    return newUser.dataValues
+    return newUser.dataValues;
   }
 }

@@ -2,7 +2,7 @@ interface IComment {
   id: string;
   message: string;
   username: string;
-  createdAt: Date;
+  createdAt: string;
   replies?: IComment[];
 }
 

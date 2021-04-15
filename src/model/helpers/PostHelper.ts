@@ -3,6 +3,8 @@ import IPost from "../../interfaces/post.interface";
 import { database } from "../fakeDB";
 import { UserHelper } from "./UserHelper";
 import IComment from "../../interfaces/comment.interface";
+import INotification from "../../interfaces/notification.interface";
+
 import { v4 as uuidv4 } from "uuid";
 
 export class PostHelper {
@@ -55,11 +57,9 @@ export class PostHelper {
 
         // console.log(notice_id);
 
-        if (database.users[j].notifications[i].id == notice_id) {
-          console.log("matched");
+        const notice = database.users[j].notifications[i] as INotification;
 
-          console.log("index " + i);
-
+        if (notice.id == notice_id) {
           database.users[j].notifications.splice(i, 1);
           console.log(database.users[j].notifications);
         }
@@ -132,7 +132,7 @@ export class PostHelper {
     merged_posts.sort((a, b) => {
       var dateA = new Date(a.createdAt);
       var dateB = new Date(b.createdAt);
-      return dateB - dateA;
+      return dateB.getTime() - dateA.getTime();
     });
 
     return merged_posts;

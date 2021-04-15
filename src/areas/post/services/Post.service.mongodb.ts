@@ -39,9 +39,14 @@ export class MockPostServiceMongodb implements IPostService {
 		const posts = await userCollection.find({"_id" : ObjectId(req_user._id)}).project({posts: 1}).toArray();
 
     console.log('stoppererrrgup');
-    console.log(posts[0].posts);
+    console.log(posts);
     await client.close();
-    return posts[0].posts;
+
+    let reverse_posts = [];
+    if(posts[0].posts) {
+      reverse_posts = posts[0].posts.reverse();
+    }
+    return reverse_posts;
   }
   findById(id: string): IPost {
     // 🚀 Implement this yourself.

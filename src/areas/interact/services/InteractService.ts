@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 
 
-export default interface InteractService {
+export default interface InteractServiceInterface {
     // addPost(post: IPost, username?: string): void;
     notifications(req: Request, res: Response, next: NextFunction);
   

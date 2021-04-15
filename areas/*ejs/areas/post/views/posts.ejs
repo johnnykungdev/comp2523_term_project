@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>devHouse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-2.1.1.min.js"
+    ></script>
+  </head>
+  <body class="bg-grey-light font-sans">
+    <div
+      class="container mx-auto flex flex-col lg:flex-row mt-3 text-sm leading-normal"
+    >
+    <div class="w-full bg-white mb-4">    
+        <%- include('../../_ejs_partials/header.ejs') %>
+
+        
+        <div class="p-5">
+          <div class="bg-white  mx-auto w-full sm:w-11/12 md:w-8/12 lg:w-6/12 rounded">
+            <div class="flex items-center justify-start gap-3 py-2 mx-3 border-b">
+              <img
+                class="w-12 h-12 rounded-full"
+                src="https://user-images.githubusercontent.com/76543451/103982284-0a6f0b00-5138-11eb-872b-0b9e70fc5c25.gif"
+              />
+              <form class="w-full" action="/posts" method="POST">
+                <input
+                  class="w-9/12 bg-gray-200 rounded-full px-3 py-2"
+                  name="postText"
+                  placeholder="What's on your mind, Ross?"
+                />
+                <input class="transition duration-500 ease-in-out hover:bg-red-600 transform w-2/12 rounded-full p-2 bg-gray-800 cursor-pointer text-gray-200" type="submit" value="Post">
+              </form>
+            </div>
+            <div></div>
+          </div>
+          
+        <!-- Post begins -->
+        <% if(posts.length > 0) { %>
+        <% posts.forEach(post => { 
+          if (post.hasOwnProperty('originalDate')) {
+          %>
+          <div>
+            <h2><%= user.username %> reposted at <%= post.createdAt %></h2>
+        <div class="flex bg-gray-100 mb-4 rounded-lg ml-10">
+          <div class="w-1/8 text-right pl-3 pt-3">
+            <div>
+              <a href="#"
+                ><img
+                  src="https://user-images.githubusercontent.com/76543451/103982284-0a6f0b00-5138-11eb-872b-0b9e70fc5c25.gif"
+                  alt="avatar"
+                  class="rounded-full h-12 w-12 mr-2"
+              /></a>
+            </div>
+          </div>
+
+          <div class="w-7/8 p-3 pl-0">
+            <!-- <div class="text-xs text-grey-dark">Reposted</div> -->
+            <div class="flex justify-between">
+              <div>
+                <span class="font-bold"
+                  ><a href="#" class="text-black"
+                    ><%= post.username %></a
+                  ></span
+                >
+                <!-- <span class="text-grey-dark"></span> -->
+                <span class="text-grey-dark"><%= post.originalDate %></span>
+                <!-- <span class="inline-block">
+                  <form action="/delete" method="post">
+                    <input type="hidden" value="<%= post.postId %>" name="postToDelete" />
+                    <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
+                  </form>
+                  
+                </span> -->
+              </div>
+
+            </div>
+            <div>
+              <div class="mb-4">
+                <p class="mb-6"><%= post.message %></p>
+              </div>
+              <div class="pb-2 flex">
+                <span class="mr-8"
+                  ><a
+                    href="/posts/<%= post.username %>/<%= post.id %>"
+                    class="text-grey-dark hover:no-underline hover:text-blue-light"
+                    ><i class="fa fa-comment fa-lg mr-2"></i> <%=
+                    post.commentList.length %></a
+                  ></span
+                >
+                  <span class="mr-8">
+                    <!-- <form action="/interact/repost" method="post"> -->
+                    <form id="<%= post.id %>" class="oop_repost_form">
+
+                      <input hidden class="oop_post_username" type="text" name="username" value="<%= post.username %>"
+                      />
+                      <input hidden class="oop_post_id"  type="text" name="post_id" value="<%= post.id %>"
+                      />
+
+                      <button
+                        class="oop_repost_btn text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                        style="transition: all 0.15s ease"
+                        type="submit"
+                      >
+                      <i class="fa fa-retweet fa-lg mr-2"></i> <%=
+                      post.reposts %>
+                      </button> 
+                    </form>
+                  </span>
+                  <form action="/interact/like" method="post">
+                    <span class="mr-8"
+                  >
+                  <input type="hidden" value="<%= post.username %>" name="poster_username" />
+                  <input type="hidden" value="<%= post.id %>" name="post_id" />
+                  <button
+                    type="submit"
+                    class="text-grey-dark hover:no-underline hover:text-red"
+                    >
+                    <% if (post.likes.includes(user.username)) { %>
+                    <i class="fa fa-heart fa-lg mr-2"></i>
+                    <% } else { %>
+                      <i class="fa fa-heart-o fa-lg mr-2"></i>
+                    <% } %>
+                    <%= post.likes.length
+                    %></button
+                  ></span>
+                
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+          <% } else { %>
+        <div class="flex bg-gray-100 mb-4 rounded-lg">
+          <div class="w-1/8 text-right pl-3 pt-3">
+            <div>
+              <a href="#"
+                ><img
+                  src="https://user-images.githubusercontent.com/76543451/103982284-0a6f0b00-5138-11eb-872b-0b9e70fc5c25.gif"
+                  alt="avatar"
+                  class="rounded-full h-12 w-12 mr-2"
+              /></a>
+            </div>
+          </div>
+
+          <div class="w-7/8 p-3 pl-0">
+            <!-- <div class="text-xs text-grey-dark">Reposted</div> -->
+            <div class="flex justify-between">
+              <div>
+                <span class="font-bold"
+                  ><a href="#" class="text-black"
+                    ><%= post.username %></a
+                  ></span
+                >
+                <!-- <span class="text-grey-dark"></span> -->
+                <span class="text-grey-dark"><%= post.createdAt %></span>
+                <span class="inline-block">
+                  <a href="/posts/<%= post.id %>/delete" >
+                    <i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i>
+                  </a>
+                  
+                </span>
+              </div>
+
+            </div>
+            <div>
+              <div class="mb-4">
+                <p class="mb-6"><%= post.message %></p>
+              </div>
+              <div class="pb-2 flex">
+                <span class="mr-8"
+                  ><a
+                    href="/posts/<%= post.username %>/<%= post.id %>"
+                    class="text-grey-dark hover:no-underline hover:text-blue-light"
+                    ><i class="fa fa-comment fa-lg mr-2"></i> <%=
+                    post.commentList.length %></a
+                  ></span
+                >
+                  <span class="mr-8">
+                    <!-- <form action="/interact/repost" method="post"> -->
+                    <form id="<%= post.id %>" class="oop_repost_form">
+
+                      <input hidden class="oop_post_username" type="text" name="username" value="<%= post.username %>"
+                      />
+                      <input hidden class="oop_post_id"  type="text" name="post_id" value="<%= post.id %>"
+                      />
+
+                      <button
+                        class="oop_repost_btn text-pink-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                        style="transition: all 0.15s ease"
+                        type="submit"
+                      >
+                      <i class="fa fa-retweet fa-lg mr-2"></i> <%=
+                      post.reposts %>
+                      </button> 
+                    </form>
+                  </span>
+
+                  <form action="/interact/like" method="post">
+                    <span class="mr-8"
+                  >
+                  <input type="hidden" value="<%= post.username %>" name="poster_username" />
+                  <input type="hidden" value="<%= post.id %>" name="post_id" />
+                  <button
+                    type="submit"
+                    class="text-grey-dark hover:no-underline hover:text-red"
+                    >
+                    <% if (post.likes.includes(user.username)) { %>
+                    <i class="fa fa-heart fa-lg mr-2"></i>
+                    <% } else { %>
+                      <i class="fa fa-heart-o fa-lg mr-2"></i>
+                    <% } %>
+                    <%= post.likes.length
+                    %></button
+                  ></span>
+                
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } } ) %>
+        <% } %>
+        <!-- Post ends -->
+      </div>
+    </div>
+    <script src="/js/fetch.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+    <script>
+      const setup = () => {
+        return {
+          loading: true,
+          isSidebarOpen: false,
+          toggleSidbarMenu() {
+            this.isSidebarOpen = !this.isSidebarOpen
+          },
+          isSettingsPanelOpen: false,
+          isSearchBoxOpen: false,
+        }
+      }
+    </script>
+  </body>
+</html>

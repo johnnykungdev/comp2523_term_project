@@ -1,0 +1,42 @@
+<% if (post.hasOwnProperty('originalDate')) { %>
+
+<h2><%= user.username %> reposted at <%= post.createdAt %></h2>
+<div class="repost_content">
+  <% } %>
+  <p><%= post.username %> : <%= post.originalDate %></p>
+  <p><%= post.message %></p>
+  <div class="interact">
+    <span class="comments">
+      <a href="/posts/<%= post.username %>/<%= post.id %>"
+        ><i class="fa fa-comment fa-lg mr-2"></i> <%= post.commentList.length %></a
+      ></span
+    >
+    <span class="repost">
+      <form id="<%= post.id %>" class="oop_repost_form">
+        <input hidden class="oop_post_username" type="text" name="username" value="<%= post.username %>" />
+        <input hidden class="oop_post_username" type="text" name="username" value="<%= post.username %>" />
+        <input hidden class="oop_post_id" type="text" name="post_id" value="<%= post.id %>" />
+        <button class="oop_repost_btn" type="submit">
+          <i class="fa fa-retweet fa-lg mr-2"></i> <%= post.reposts %>
+        </button>
+      </form>
+    </span>
+    <span>
+      <form action="/interact/like" method="post">
+        <input hidden type="text" value="<%= post.username %>" name="poster_username" />
+        <input hidden type="text" value="<%= post.id %>" name="post_id" />
+        <button type="submit">
+          <% if (post.likes.includes(user.username)) { %>
+          <i class="fa fa-heart fa-lg mr-2"></i>
+          <% } else { %>
+          <i class="fa fa-heart-o fa-lg mr-2"></i>
+          <% } %> <%= post.likes.length %>
+        </button>
+      </form>
+    </span>
+  </div>
+
+  <% if (post.hasOwnProperty('originalDate')) { %>
+</div>
+
+<% } %>

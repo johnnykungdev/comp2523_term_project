@@ -3,7 +3,7 @@ import { PostHelper } from "../../../model/helpers/PostHelper";
 import { UserHelper } from "../../../model/helpers/UserHelper";
 import { InteractHelper } from "../../../model/helpers/InteractHelper";
 import IController from "../../../interfaces/controller.interface";
-import { InteractService } from "../services";
+import InteractServiceInterface from "../services/InteractService";
 
 import IPost from "../../../interfaces/post.interface";
 import IUser from "../../../interfaces/user.interface";
@@ -11,9 +11,9 @@ import IUser from "../../../interfaces/user.interface";
 class SearchController implements IController {
   public path = "/interact";
   public router = Router();
-  public _interact_service: InteractService;
+  public _interact_service: InteractServiceInterface;
 
-  constructor(interact_service: InteractService) {
+  constructor(interact_service: InteractServiceInterface) {
     this.initializeRoutes();
     this._interact_service = interact_service;
   }

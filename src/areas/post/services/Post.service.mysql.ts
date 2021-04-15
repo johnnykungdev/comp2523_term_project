@@ -32,14 +32,13 @@ export class PostServiceMysql implements IPostService {
     let newPost = postModel.build(post_obj);
     await newPost.save();
   }
-  async getUserPosts(req_user): Promise<IPost[]> {
-    console.log('getUserPosts service');
+  async getUserPosts(req_user) {
     const posts = await postModel.findAll({
       raw: true,
       where: {
         user_id: req_user.id,
       },
-    });
+    }) as IPost[];
 
     for (let i = 0; i < posts.length; i++) {
       const likes = await likeModel.findAll({
@@ -60,10 +59,8 @@ export class PostServiceMysql implements IPostService {
       posts[i]["commentList"] = commentList;
 
     }
-    console.log('stopperposts');
-    console.log(posts);
     
-    return posts;
+    return posts.reverse();
   }
   findById(id: string): IPost {
     // 🚀 Implement this yourself.

@@ -90,9 +90,7 @@ export class AuthenticationServiceMongoDb implements IAuthenticationService {
         } catch (ex) {
           console.log(ex);
           return null;
-        } finally {
-          await client.close();
-        }
+        } 
       }
     } catch (err) {
       console.log(err);

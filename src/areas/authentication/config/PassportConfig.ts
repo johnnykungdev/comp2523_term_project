@@ -3,7 +3,7 @@
 //----------------------------------------
 // 🚀 Configure Passport.js Local Authentication in this file
 //    Ensure code is fully typed wherever possible (unless inference can be made)
-import { MockAuthenticationService, AuthenticationService } from "../services";
+import { IAuthenticationService  } from "../services";
 import * as passportLocal from "passport-local";
 import WrongCredentialsException from "../../../exceptions/WrongCredentialsException";
 const LocalStrategy = passportLocal.Strategy;
@@ -14,7 +14,7 @@ export default class PassportConfig {
   private _user;
   private _auth_service;
 
-  constructor(auth_service: AuthenticationService) {
+  constructor(auth_service: IAuthenticationService) {
     this._auth_service = auth_service;
     this._strategy = new LocalStrategy(
       {
@@ -47,7 +47,7 @@ export default class PassportConfig {
     return this._user;
   }
 
-  public get auth_service(): AuthenticationService {
+  public get auth_service(): IAuthenticationService {
     return this._auth_service;
   }
 }

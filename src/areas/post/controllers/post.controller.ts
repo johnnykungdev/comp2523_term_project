@@ -47,9 +47,8 @@ class PostController implements IController {
     
     console.log(req.user);
     
-    const u_id = req.user._id;
-    this._postService.getUserPosts(u_id);
     const user = req.user as IUser;
+    const posts = this._postService.getUserPosts(user);
 
     res.render("post/views/feeds", { posts, user });
   };
@@ -84,10 +83,12 @@ class PostController implements IController {
   // };
 
   private commentReply = async (req: Request, res: Response) => {
+
+    const user = req.user as IUser;
     const reply_content = {
       id: uuidv4(),
       message: req.body.replyText,
-      username: req.user.username,
+      username: user.username,
       createdAt: new Date(),
     };
 
@@ -117,10 +118,6 @@ class PostController implements IController {
     const posts = await this._postService.getUserPosts(req.user);
     const user = req.user;
 
-    console.log('is getUserPosts called?');
-    console.log(posts);
-    console.log('lllllllll');
-    // res.render("post/views/posts", { posts, user });
     res.render("post/views/NEW_VIEW/posts", { posts, user });
   };
 
@@ -134,25 +131,26 @@ class PostController implements IController {
   };
 
   private getPostByNotification = async (req: Request, res: Response, next: NextFunction) => {
-    let username = req.user.username;
+    const user = req.user as IUser;
+    let username = user.username;
 
     console.log("fidning poast");
     console.log(username);
     console.log(req.params.post_id);
 
     const post = PostHelper.select(username, [{ id: req.params.post_id }])[0];
-    const user = req.user;
     PostHelper.removeNotice(req.params.id);
     res.render("post/views/NEW_VIEW/post", { post, user });
   };
 
   // 🚀 These post methods needs to be implemented by you
   private createComment = async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as IUser;
     const comment_obj: IComment = {
       id: uuidv4(),
       message: req.body.commentText,
-      username: req.user.username,
-      createdAt: new Date(),
+      username: user.username,
+      createdAt: new Date().toString(),
       replies: [],
     };
 
@@ -166,7 +164,7 @@ class PostController implements IController {
     const comment_notice = {
       poster_username: req.body.poster_username,
       post_id: req.body.post_id,
-      current_user: req.user.username,
+      current_user: user.username,
     };
 
     PostHelper.addNotification(comment_notice, "commented");
@@ -175,14 +173,11 @@ class PostController implements IController {
   };
 
   private addPost = async (req: Request, res: Response, next: NextFunction) => {
-console.log('addPost addPost addPost');
-console.log(req.user);
-
-
+    const user = req.user as IUser;
     const req_data = {
       message: req.body.postText,
-      username: req.user.username,
-      user_id: req.user.id
+      username: user.username,
+      user_id: user.id
     }
 
    await this._postService.addPost(req_data);

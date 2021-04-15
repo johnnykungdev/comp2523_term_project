@@ -1,4 +1,4 @@
-import { InteractService } from "./InteractService";
+import  InteractService from "./InteractService";
 import { Request, Response, NextFunction, Router } from "express";
 import { PostHelper } from "../../../model/helpers/PostHelper";
 import { UserHelper } from "../../../model/helpers/UserHelper";
@@ -18,17 +18,18 @@ export class InteractServiceMock implements InteractService {
         notifications.sort((a, b) => {
           var dateA = new Date(a.createdAt);
           var dateB = new Date(b.createdAt);
-          return dateB - dateA;
+          return dateB.getTime() - dateA.getTime();
         });
         // res.send(notifications);
         return notifications;
       }
     
        async like(req: Request, res: Response, next: NextFunction) {
+        const user = req.user as IUser;
         const like_notice = {
           poster_username: req.body.poster_username,
           post_id: req.body.post_id,
-          current_user: req.user.username,
+          current_user: user.username,
         };
     
         await PostHelper.like(like_notice);
@@ -47,12 +48,12 @@ export class InteractServiceMock implements InteractService {
       }
     
        async follow_action(req: Request, res: Response, next: NextFunction) {
-    
-        if (req.user.username != Object.values(req.body)[0]) {
+        const user = req.user as IUser;
+        if (user.username != Object.values(req.body)[0]) {
           if (Object.keys(req.body)[0] == "follow_user") {
-            await InteractHelper.follow(req.user.username, Object.values(req.body)[0]);
+            await InteractHelper.follow(user.username, Object.values(req.body)[0]);
           } else {
-            await InteractHelper.unfollow(req.user.username, Object.values(req.body)[0]);
+            await InteractHelper.unfollow(user.username, Object.values(req.body)[0]);
           }
         }
     
@@ -61,12 +62,13 @@ export class InteractServiceMock implements InteractService {
     
        async repost(req: Request, res: Response, next: NextFunction) {
         await InteractHelper.repost(req.user, req.body.username, req.body.post_id);
+        const user = req.user as IUser;
     
         // res.redirect("back");
         const repost_notice = {
           poster_username: req.body.username,
           post_id: req.body.post_id,
-          current_user: req.user.username,
+          current_user: user.username,
         };
     
         PostHelper.addNotification(repost_notice, "reposted");

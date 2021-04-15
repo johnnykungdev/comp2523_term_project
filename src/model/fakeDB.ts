@@ -76,7 +76,7 @@ let database: IDatabase = {
                 {
                   id: "random_reply_id",
                   message: "cool beans bill",
-                  createdAt: new Date(),
+                  createdAt: new Date().toString(),
                   username: "james123",
                 },
                 {

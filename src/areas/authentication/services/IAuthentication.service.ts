@@ -10,3 +10,4 @@ export interface IAuthenticationService {
 
   getUserByEmailAndPassword(email: string, password: string): Promise<IUser>;
 }
+

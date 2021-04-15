@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/iframe/main.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <section class="chat_header flex">
+
+      <img class="profile_thumb" src="https://www.peta.org/wp-content/uploads/2014/01/goldfish-sxc.hu_.jpg"></img>
+
+
+    </section>
+    <section class="messages flex">
+        <p class="my_msg">hey man</p>
+        <p class="his_msg">sup dude</p>
+
+    </section>
+    <section class="msg_input grid"><textarea ></textarea>
+    <div class="submit"><p>Send</p></div></section>
+
+    <section>
+    <div><%= "<a href='#'>Test</a>" %></div>
+    <div><%- "<a href='#'>Test</a>" %></div>
+    </section>
+
+    <script src="/js/iframe/chat.js" charset="utf-8"></script>
+  </body>
+</html>

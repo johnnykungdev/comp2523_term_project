@@ -10,10 +10,13 @@ import { AuthenticationServiceMongoDb, AuthenticationServiceMysql } from "./area
 
 import { PostServiceMysql, MockPostServiceMongodb } from "./areas/post/services";
 
+import { InteractServiceMock } from "./areas/interact/services";
+
+
 const server = new App([
-  new PostController(new PostServiceMysql()),
-  new AuthenticationController(new AuthenticationServiceMysql()),
-  new SearchController(),
+  new AuthenticationController(new AuthenticationServiceMongoDb()),
+  new PostController(new MockPostServiceMongodb()),
+  new SearchController(new InteractServiceMock()),
   new IframeController(),
 ]);
 

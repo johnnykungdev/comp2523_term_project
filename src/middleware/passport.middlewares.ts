@@ -21,6 +21,6 @@ module.exports = (app) => {
     }
   });
 
-  const localLogin = new PassportConfig(new AuthenticationServiceMysql());
+  const localLogin = new PassportConfig(new AuthenticationServiceMongoDb());
   passport.use(localLogin.strategy);
 };

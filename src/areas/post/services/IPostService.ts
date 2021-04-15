@@ -8,7 +8,7 @@ export default interface IPostService {
 
   sortPosts(posts: IPost[]): IPost[];
 
-  getUserPosts(username: string): Promise<IPost[]> | IPost[];
+  getUserPosts(user): Promise<IPost[]> | IPost[];
 
   findById(id: string): IPost | undefined;
 

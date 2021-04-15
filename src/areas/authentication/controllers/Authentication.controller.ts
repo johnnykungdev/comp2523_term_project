@@ -33,7 +33,7 @@ class AuthenticationController implements IController {
     this.router.get(`${this.path}/logout`, this.logout);
   }
 
-  private showLoginPage = (req: express.Request, res: express.Response) => {
+  private showLoginPage = (req: Request, res: express.Response) => {
     let messages: string[] = [];
     let err_msg = req.flash("error");
     let reg_success_msg = req.flash("info");

@@ -11,7 +11,7 @@ export class CommentViewModel {
   message: string;
 
   constructor(comment: IComment) {
-    this.userId = comment.userId;
+    this.userId = comment.id;
     this.createdAt = comment.createdAt;
     this.message = comment.message;
   }
