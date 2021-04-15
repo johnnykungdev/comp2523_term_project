@@ -113,6 +113,52 @@ const database: IDatabase = {
       following: [],
       reposts: [],
     },
+    {
+      id: "3",
+      username: "guest_user",
+      email: "guest_user@gmail.com",
+      password: "guest_user",
+      firstName: "guest_user",
+      lastName: "guest_user",
+      posts: [
+        {
+          id: "abc3",
+          userId: "guest_user",
+          message: "A post by guest_user",
+          createdAt: new Date(),
+          likes: 30,
+          reposts: 50,
+          comments: 12,
+          commentList: [
+            {
+              id: "abc4",
+              createdAt: "2012-01-05T04:13:24Z",
+              userId: "billgates",
+              message: "Cool post guest_user. Glad I decided to follow you.",
+            },
+          ],
+        },
+        {
+          id: "abc5",
+          userId: "guest_user",
+          message: "Nice weather today in Vancouver",
+          createdAt: new Date(),
+          likes: 30,
+          reposts: 50,
+          comments: 12,
+          commentList: [
+            {
+              id: "abc6",
+              userId: "billgates",
+              createdAt: "2012-02-05T05:13:24Z",
+              message: "The weather is always nice when you're rich like me.",
+            },
+          ],
+        },
+      ],
+      following: [],
+      reposts: [],
+    },
   ],
 };
 

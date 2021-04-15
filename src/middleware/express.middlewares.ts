@@ -6,6 +6,7 @@ import flash from "connect-flash";
 import redis from "redis";
 import connectRedis from "connect-redis";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 dotenv.config();
 
 module.exports = (app) => {
@@ -17,6 +18,8 @@ module.exports = (app) => {
 
   // Logging Middleware
   app.use(morgan("tiny"));
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
 
   function getStore() {
     if (process.env.IS_HEROKU) {
