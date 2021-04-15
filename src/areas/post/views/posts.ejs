@@ -13,7 +13,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
     />
-
+    <link rel="stylesheet" href="/css/posts.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script
       type="text/javascript"
@@ -50,26 +50,33 @@
         <!-- Post begins -->
 
         <section class="posts">
-          <% posts.forEach(function(post){ %> <%- include('../../_ejs_partials/renderPost.ejs', {post: post, user:
-          user, likes: post.likes}); %> <% });%>
+          <% posts.forEach(function(post){ %> 
+            
+            <% if (post.hasOwnProperty('originalDate')) { %>
+              <h2><%= user.username %> reposted at <%= post.createdAt %>               <span class="inline-block">
+                <form action="/posts/deleteRepost" method="post">
+                  <input type="hidden" value="<%= post.id %>" name="postToDelete" />
+                  <button type="submit"><i class="transition duration-500 ease-in-out hover:bg-gray-300 transform p-5 rounded-full fa fa-trash"></i></button>
+                </form>
+                
+              </span></h2>
+              <div class="repost_content">
+                <% } %> 
+
+                <%- include('../../_ejs_partials/renderPost.ejs', {post: post, user:
+          user}); %> 
+
+            <% if (post.hasOwnProperty('originalDate')) { %>
+              </div>
+            <% } %> 
+            
+          <% });%>
         </section>
 
         <!-- Post ends -->
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
-    <script>
-      const setup = () => {
-        return {
-          loading: true,
-          isSidebarOpen: false,
-          toggleSidbarMenu() {
-            this.isSidebarOpen = !this.isSidebarOpen
-          },
-          isSettingsPanelOpen: false,
-          isSearchBoxOpen: false,
-        }
-      }
-    </script>
+
   </body>
 </html>

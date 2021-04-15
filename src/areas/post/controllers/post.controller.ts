@@ -23,10 +23,19 @@ class PostController implements IController {
     this.router.get(this.path, this.getAllPosts);
     this.router.get(`${this.path}/:id`, this.getPostById);
     this.router.post(`${this.path}/delete`, this.deletePost);
+    this.router.post(`${this.path}/deleteRepost`, this.deleteRepost);
     this.router.post(`${this.path}/:id/comment`, this.createComment);
     this.router.post(`${this.path}`, this.createPost);
     this.router.post(`${this.path}/:id/like`, this.likePost);
+    this.router.post(`${this.path}/repost`, this.repost);
+  }
 
+  private repost = async (req: Request, res: Response) => {
+
+    console.log('inside controller repost');
+    await this._postService.repost(req);
+
+    res.end();
   }
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary posts object
@@ -41,9 +50,12 @@ class PostController implements IController {
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
   private getPostById = async (req: Request, res: Response, next: NextFunction) => {
+
+    const user = req.user as IUser;
+    console.log('getPostById');
+    console.log(user);
     const post = this._postService.findById(req.params.id)
-    console.log("post", post)
-    res.render("post/views/post", { post, user:req.user  });
+    res.render("post/views/post", { post, user });
   };
 
   // 🚀 These post methods needs to be implemented by you
@@ -81,6 +93,15 @@ class PostController implements IController {
     this._postService.deletePost(userId, deletedPostId)
     res.redirect("/posts")
   };
+
+
+  private deleteRepost = async (req: Request, res: Response, next: NextFunction) => {
+    const deletedPostId = req.body.postToDelete
+    const userId = req.user.id
+    await this._postService.deleteRepost(userId, deletedPostId)
+    res.redirect("/posts");
+  };
+
 
   private getUserPost(userId: string, postId: string): object {
     const user = this._db.find(user => user.id === userId)

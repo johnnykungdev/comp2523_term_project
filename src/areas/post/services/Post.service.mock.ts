@@ -2,7 +2,8 @@ import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 import { DbHelper } from "../../../model/helpers/dbHelper";
 import IUser from "../../../interfaces/user.interface";
-
+import { Request} from "express";
+import { database } from "../../../model/fakeDB";
 
 // ⭐️ Feel free to change this class in any way you like. It is simply an example...
 export class MockPostService implements IPostService {
@@ -40,6 +41,45 @@ export class MockPostService implements IPostService {
     return [];
   }
 
+  repost(req: Request) {
+    const repost_obj = {
+      poster_username: req.body.username,
+      post_id: req.body.post_id,
+      repostedAt: new Date(),
+    };
+    const current_user = req.user as IUser;
+
+    // increment repost number
+    // for (let i = 0; i < database.users.length; i++) {
+    //   if ((req.body.username = database.users[i].username)) { 
+    //     for (let j = 0; j < database.users[i].posts.length; j++) {
+    //         database.users[i].posts[j].reposts++;
+    //       }
+    //     }
+    //   }
+
+    console.log('req.body.username');
+    console.log(req.body.username);
+
+    console.log('req.body.post_id');
+    console.log(req.body.post_id);
+
+     let reposted_post = DbHelper.recurseSelect([{ users: { username: req.body.username } }, { posts: { id: req.body.post_id } }])
+
+     reposted_post.reposts++;
+
+      // add repost object
+      for (let user of database.users) {
+        if (current_user.username == user.username) {
+          user.reposts.push(repost_obj);
+
+          console.log('repost success');
+          return;
+        }
+      }
+
+      throw new Error("user not found");
+    }
 
   addPost(post: IPost, userId: string): void {
     //db helper, can switch to real db services later
@@ -47,6 +87,35 @@ export class MockPostService implements IPostService {
 
     // throw new Error("Method not implemented.");
   }
+
+  private getRepostedPosts(username) {
+
+    console.log('getRepostedPosts ' + username);
+    
+    const reposts = DbHelper.select([{ username: username }])[0].reposts;
+
+    console.log('post_array post_array');
+    console.log(reposts);
+
+    const post_array: IPost[] = [];
+    //buidling the posts object here
+    for (let r of reposts) {
+      for (let u of database.users) {
+        // match user
+        if (r.poster_username == u.username) {
+          // match post
+          for (let p of u.posts) {
+            if (r.post_id == p.id) {
+              let p_copy = { ...p, createdAt: r.repostedAt, originalDate: p.createdAt };
+              post_array.push(p_copy);
+            }
+          }
+        }
+      }
+    }
+    return post_array;
+  }
+
   getAllPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
 
@@ -55,8 +124,9 @@ export class MockPostService implements IPostService {
     const user = DbHelper.select([{ username: username }]);
     const ownposts = user[0].posts;
     const followed_posts = this.getFollowedPosts(username);
+    const reposted_posts = this.getRepostedPosts(username);
 
-    merged_posts.push(...ownposts, ...followed_posts);
+    merged_posts.push(...ownposts, ...followed_posts, ...reposted_posts);
 
     merged_posts.sort((a, b) => {
       const dateA = new Date(a.createdAt);
@@ -98,5 +168,22 @@ export class MockPostService implements IPostService {
 
   deletePost(userId: string, postId: string) {
     DbHelper.deletePost(userId, postId)
+  }
+
+
+  deleteRepost(userId: string, postId: string) {
+    const user = DbHelper.select([{ id: userId }]);
+    const reposts = user[0].reposts;
+    console.log('repossssst');
+    console.log(reposts);
+    
+    for (let i = 0; i < reposts.length; i++) {
+
+      if(reposts[i].post_id == postId) {
+        console.log(i);
+        
+        reposts.splice(i, 1);
+      }
+    }
   }
 }
