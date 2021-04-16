@@ -1,8 +1,8 @@
 Sean's db integration (see Main branch for break down of tasks):
 
 
-Implemented MySQL(with Sequelizer) and MongoDb services.
-    - ONLY the sign up, login, and create post features are completed. 
+Implemented MySQL(with Sequelizer) and MongoDb services.  
+    - ONLY the sign up, login, and create post features are completed.  
     - ONLY works on local, not deployed to Heroku
 
 
