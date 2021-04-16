@@ -3,10 +3,10 @@ import IPost from "../../../interfaces/post.interface";
 // ⭐️ Feel free to change this interface in any way you like. It is simply an example...
 export default interface IPostService {
   addPost(post: IPost, username: string): void;
-
+  deletePost(postId: string) : void;
   sortPosts(posts: IPost[]): IPost[];
 
-  getAllPosts(username: string): IPost[];
+  getAllPosts(username: string): Promise<IPost[]>;
 
   findById(id: string): IPost | undefined;
 
@@ -17,5 +17,5 @@ export default interface IPostService {
   ): IPost | void;
 
   buildNewPost(req: Request): IPost;
-  deletePost(userId: string, postId: string) : void;
+  
 }

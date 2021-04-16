@@ -1,15 +1,27 @@
 import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
+import admin from '../../../model/firebase'
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
 export class PostService implements IPostService {
-  addPost(post: IPost, username: string): void {
-    // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+  private _database: any
+  constructor() {
+    this._database = admin.database()
   }
-  getAllPosts(username: string): IPost[] {
+
+  async addPost(post: IPost, username: string): Promise<void> {
     // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+    const ref = this._database.ref("users/posts")
+    await ref.push(post)
+    console.log('123')
+  }
+
+  deletePost(postId: string) {
+    
+  }
+  async getAllPosts(userId: string): Promise<IPost[]> {
+    const ref = this._database.ref("users")
+    const result = await ref.on("value").val()
   }
   findById(id: string): IPost {
     // 🚀 Implement this yourself.
