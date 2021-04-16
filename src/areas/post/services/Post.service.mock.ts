@@ -2,7 +2,8 @@ import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 import IUser from '../../../interfaces/user.interface'
 import admin from '../../../model/firebase'
-import { findOne, fbObjectToArray } from '../../../model/firebase.helper'
+import { findOne, fbObjectToArray, insertOne } from '../../../model/firebase.helper'
+import { DbHelper } from "model/helpers/dbHelper";
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
 export class MockPostService implements IPostService {
@@ -11,11 +12,19 @@ export class MockPostService implements IPostService {
     this._database = admin.database()
   }
 
-  async addPost(post: IPost, username: string): Promise<void> {
+  async addPost(post: IPost, userId: string): Promise<void> {
     // 🚀 Implement this yourself.
-    const ref = this._database.ref("users/posts")
-    await ref.push(post)
-    console.log('123')
+    
+    const userRef = this._database.ref("users")
+    const user = await findOne(userRef, { queryType: "id", condition: Number(userId)})
+    if (!user) throw new Error("User not found.")
+    const userKey = Object.keys(user)
+    const insertRef = this._database.ref(`users/${userKey}/posts`)
+    const insertResult = await insertOne(insertRef, post)
+    console.log("insertResult", insertResult)
+
+    // await ref.push(post)
+    // console.log('123')
   }
 
   deletePost(postId: string) {
@@ -35,7 +44,6 @@ export class MockPostService implements IPostService {
       post.commentList = fbObjectToArray(oldCommentList)
     })
 
-    console.log(userPosts)
     userPosts.forEach(post => allPosts.push(post))
 
     const followedUsers = fbObjectToArray(user.following)
@@ -49,12 +57,9 @@ export class MockPostService implements IPostService {
       return followedUsersInfo
     }
     const followedUsersObject = await getFollowedUsers()
-    console.log("followedUsersObject", followedUsersObject)
 
     followedUsersObject.forEach((followedUser:IUser) : void => {
-      console.log("followedUser", followedUser)
       const followedUserPosts = fbObjectToArray(followedUser.posts)
-      console.log(followedUserPosts)
       followedUserPosts.forEach((userPost: IPost) => {
         userPost.commentList = fbObjectToArray(userPost.commentList)
         allPosts.push(userPost)
@@ -63,12 +68,11 @@ export class MockPostService implements IPostService {
 
     allPosts.sort(function (a: any, b: any) {
       if (new Date(a.createdAt) > new Date(b.createdAt)) {
-        return 1
-      } else {
         return -1
+      } else {
+        return 1
       }
     })
-    console.log("allPosts", allPosts)
     return allPosts
   }
   findById(id: string): IPost {

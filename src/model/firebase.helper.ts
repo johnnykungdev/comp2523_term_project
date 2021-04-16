@@ -11,6 +11,18 @@ function findOne(ref: any, query: { queryType: string, condition: string | numbe
   })
 }
 
+function insertOne(ref: any, newObject: any) {
+  return new Promise((resolve, reject) => {
+    ref.push(newObject, (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve("success")
+      }
+    })
+  })
+}
+
 function fbObjectToArray(fbObject: any): any {
   let resultArray = []
   for (let fbId in fbObject) {
@@ -19,4 +31,4 @@ function fbObjectToArray(fbObject: any): any {
   return resultArray
 }
 
-export { fbObjectToArray, findOne }
+export { fbObjectToArray, findOne, insertOne}

@@ -65,7 +65,7 @@ class PostController implements IController {
 
   private createPost = async (req: Request, res: Response, next: NextFunction) => {
     const newPost: IPost = this._postService.buildNewPost(req);
-    this._postService.addPost(newPost, req.user.id)
+    await this._postService.addPost(newPost, req.user.id)
     res.redirect("/posts")
   };
   private deletePost = async (req: Request, res: Response, next: NextFunction) => {
