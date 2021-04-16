@@ -2,14 +2,14 @@ Sean's db integration (see Main branch for break down of tasks):
 
 
 Implemented MySQL(with Sequelizer) and MongoDb services.  
-    - ONLY the sign up, login, and create post features are completed.  
-    - ONLY works on local, not deployed to Heroku
+    &nbsp; - ONLY the sign up, login, and create post features are completed.  
+    &nbsp; - ONLY works on local, not deployed to Heroku
 
 
 Quickstart steps:  
     Switch services at the following files:  
-        - src/server.ts  
-        - src/middleware/passport.middlewares.ts
+       &nbsp; - src/server.ts  
+       &nbsp; - src/middleware/passport.middlewares.ts
 
     MongoDb quickstart:
         1 - Make sure the MongoDb server and connection string is correct at "Mongodb/databaseConnection.ts"
