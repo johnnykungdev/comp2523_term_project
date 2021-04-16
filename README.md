@@ -11,7 +11,7 @@ Quickstart steps:
         - src/server.ts  
         - src/middleware/passport.middlewares.ts
 
-    MongoDb quickstart 
+    MongoDb quickstart:
         1 - Make sure the MongoDb server and connection string is correct at "Mongodb/databaseConnection.ts"
         2 - run "npm run dev" to start app
 
