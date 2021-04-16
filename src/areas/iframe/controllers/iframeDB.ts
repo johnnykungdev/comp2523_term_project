@@ -13,6 +13,7 @@ const database: IDatabase = {
       posts: [
         {
           id: "abc3",
+          username: "guest_user",
           userId: "guest_user",
           message: "A post by guest_user",
           createdAt: new Date(),
@@ -21,6 +22,7 @@ const database: IDatabase = {
           comments: 12,
           commentList: [
             {
+              username: "guest_user",
               id: "abc4",
               createdAt: "2012-01-05T04:13:24Z",
               userId: "billgates",
@@ -31,6 +33,7 @@ const database: IDatabase = {
         {
           id: "abc5",
           userId: "guest_user",
+          username: "guest_user",
           message: "Nice weather today in Vancouver",
           createdAt: new Date(),
           likes: 30,
@@ -39,6 +42,7 @@ const database: IDatabase = {
           commentList: [
             {
               id: "abc6",
+              username: "guest_user",
               userId: "billgates",
               createdAt: "2012-02-05T05:13:24Z",
               message: "The weather is always nice when you're rich like me.",
@@ -50,7 +54,6 @@ const database: IDatabase = {
       reposts: [],
     },
   ],
-
 };
 
 export { database };

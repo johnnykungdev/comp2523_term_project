@@ -2,34 +2,27 @@ import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 import { DbHelper } from "../../../model/helpers/dbHelper";
 import IUser from "../../../interfaces/user.interface";
-import { Request} from "express";
+import { Request } from "express";
 import { database } from "../../../model/fakeDB";
 
 // ⭐️ Feel free to change this class in any way you like. It is simply an example...
 export class MockPostService implements IPostService {
-
   private getGroupPosts(user_group): IPost[] {
     let allPosts: IPost[] = [];
     for (let user of user_group) {
       allPosts.push(...user.posts);
     }
 
-    console.log("getGroupPosts all posts");
-    console.log(allPosts);
-
     return allPosts;
   }
 
   private getFollowedPosts(username) {
     const followed_users_names: string[] = DbHelper.select([{ username: username }])[0].following;
-    console.log('followed_users_names');
-    console.log(followed_users_names);
-    
+
     let followed_users: IUser[] = [];
 
     if (followed_users_names.length != 0) {
       for (let name of followed_users_names) {
-
         let each_followed_user = DbHelper.select([{ username: name }])[0];
 
         followed_users.push(each_followed_user);
@@ -49,53 +42,37 @@ export class MockPostService implements IPostService {
     };
     const current_user = req.user as IUser;
 
-    // increment repost number
-    // for (let i = 0; i < database.users.length; i++) {
-    //   if ((req.body.username = database.users[i].username)) { 
-    //     for (let j = 0; j < database.users[i].posts.length; j++) {
-    //         database.users[i].posts[j].reposts++;
-    //       }
-    //     }
-    //   }
+    let reposted_post = DbHelper.recurseSelect([
+      { users: { username: req.body.username } },
+      { posts: { id: req.body.post_id } },
+    ]);
 
-    console.log('req.body.username');
-    console.log(req.body.username);
+    reposted_post.reposts++;
 
-    console.log('req.body.post_id');
-    console.log(req.body.post_id);
+    // add repost object
+    for (let user of database.users) {
+      if (current_user.username == user.username) {
+        user.reposts.push(repost_obj);
 
-     let reposted_post = DbHelper.recurseSelect([{ users: { username: req.body.username } }, { posts: { id: req.body.post_id } }])
-
-     reposted_post.reposts++;
-
-      // add repost object
-      for (let user of database.users) {
-        if (current_user.username == user.username) {
-          user.reposts.push(repost_obj);
-
-          console.log('repost success');
-          return;
-        }
+        console.log("repost success");
+        return;
       }
-
-      throw new Error("user not found");
     }
+
+    throw new Error("user not found");
+  }
 
   addPost(post: IPost, userId: string): void {
     //db helper, can switch to real db services later
-    DbHelper.insertPost(userId, post)
+    DbHelper.insertPost(userId, post);
 
     // throw new Error("Method not implemented.");
   }
 
   private getRepostedPosts(username) {
+    console.log("getRepostedPosts " + username);
 
-    console.log('getRepostedPosts ' + username);
-    
     const reposts = DbHelper.select([{ username: username }])[0].reposts;
-
-    console.log('post_array post_array');
-    console.log(reposts);
 
     const post_array: IPost[] = [];
     //buidling the posts object here
@@ -119,7 +96,6 @@ export class MockPostService implements IPostService {
   getAllPosts(username: string): IPost[] {
     // 🚀 Implement this yourself.
 
-    console.log("getAllPosts " + username);
     let merged_posts = [];
     const user = DbHelper.select([{ username: username }]);
     const ownposts = user[0].posts;
@@ -139,12 +115,15 @@ export class MockPostService implements IPostService {
 
   findById(id: string): IPost {
     // 🚀 Implement this yourself.
-    console.log(id)
-    return DbHelper.findOne({ type: "posts", conditionType: "id", condition: id})
+    console.log(id);
+    return DbHelper.findOne({ type: "posts", conditionType: "id", condition: id });
   }
   addCommentToPost(comment: { id: string; createdAt: string; userId: string; message: string }, postId: string): void {
     // 🚀 Implement this yourself.
-    DbHelper.insertOne({type: "posts", conditionType: "id", condition: postId}, {type: "commentList", newContent: comment})
+    DbHelper.insertOne(
+      { type: "posts", conditionType: "id", condition: postId },
+      { type: "commentList", newContent: comment }
+    );
   }
 
   sortPosts(posts: IPost[]): IPost[] {
@@ -153,35 +132,34 @@ export class MockPostService implements IPostService {
   }
 
   buildNewPost(req: Request) {
+    const user = req.user as IUser;
     return {
       id: `${(Math.random() * 100000000).toFixed(0)}`,
-      userId: req.user.id,
-      username: req.user.username,
+      userId: user.id,
+      username: user.username,
       message: req.body.postText,
       createdAt: new Date(),
       commentList: [],
       likes: 0,
       reposts: 0,
-      comments: 0
-    }
+      comments: 0,
+    };
   }
 
   deletePost(userId: string, postId: string) {
-    DbHelper.deletePost(userId, postId)
+    DbHelper.deletePost(userId, postId);
   }
-
 
   deleteRepost(userId: string, postId: string) {
     const user = DbHelper.select([{ id: userId }]);
     const reposts = user[0].reposts;
-    console.log('repossssst');
+    console.log("repossssst");
     console.log(reposts);
-    
-    for (let i = 0; i < reposts.length; i++) {
 
-      if(reposts[i].post_id == postId) {
+    for (let i = 0; i < reposts.length; i++) {
+      if (reposts[i].post_id == postId) {
         console.log(i);
-        
+
         reposts.splice(i, 1);
       }
     }
