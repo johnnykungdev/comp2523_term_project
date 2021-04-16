@@ -6,9 +6,9 @@ Implemented MySQL(with Sequelizer) and MongoDb services.
     - ONLY works on local, not deployed to Heroku
 
 
-Quickstart steps:
-    Switch services at the following files:
-        - src/server.ts
+Quickstart steps:  
+    Switch services at the following files:  
+        - src/server.ts  
         - src/middleware/passport.middlewares.ts
 
     MongoDb quickstart 
