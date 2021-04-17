@@ -14,9 +14,10 @@ export class MockPostService implements IPostService {
 
   async addPost(post: IPost, userId: string): Promise<string | any> {
     // 🚀 Implement this yourself.
+    console.log(userId)
     
     const userRef = this._database.ref("users")
-    const user = await findOne(userRef, null, { queryType: "id", condition: Number(userId)})
+    const user = await findOne(userRef, { queryType: "id", condition: Number(userId)})
     if (!user) throw new Error("User not found.")
     const userKey = Object.keys(user)
     const insertRef = this._database.ref(`users/${userKey}/posts`)
@@ -34,7 +35,6 @@ export class MockPostService implements IPostService {
   
       const postRef = this._database.ref(`users/${userKey}/posts`)
     
-  
       // const postRef = 
       const deletedPost = await findOne(postRef, { queryType: "id", condition: Number(postId) })
       if (deletedPost) {
@@ -44,7 +44,7 @@ export class MockPostService implements IPostService {
         return "success"
       }
     } catch(err) {
-      throw new Error(err)
+      throw `${err}`
     }
   }
 
