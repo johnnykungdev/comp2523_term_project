@@ -68,11 +68,20 @@ class PostController implements IController {
     await this._postService.addPost(newPost, req.user.id)
     res.redirect("/posts")
   };
+
   private deletePost = async (req: Request, res: Response, next: NextFunction) => {
-    const deletedPostId = req.body.postToDelete
-    const userId = req.user.id
-    this._postService.deletePost(userId, deletedPostId)
-    res.redirect("/posts")
+    try {
+      const deletedPostId = req.body.postToDelete
+      console.log("deletePostId", deletedPostId)
+      const userId = req.user.id
+      const result = await this._postService.deletePost(userId, deletedPostId)
+      res.redirect("/posts")
+    } catch(error) {
+      throw new Error(error)
+    }
+
+    
+    // res.redirect("/posts")
   };
 
 }

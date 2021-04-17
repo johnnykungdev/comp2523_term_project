@@ -12,24 +12,42 @@ export class MockPostService implements IPostService {
     this._database = admin.database()
   }
 
-  async addPost(post: IPost, userId: string): Promise<void> {
+  async addPost(post: IPost, userId: string): Promise<string | any> {
     // 🚀 Implement this yourself.
     
     const userRef = this._database.ref("users")
-    const user = await findOne(userRef, { queryType: "id", condition: Number(userId)})
+    const user = await findOne(userRef, null, { queryType: "id", condition: Number(userId)})
     if (!user) throw new Error("User not found.")
     const userKey = Object.keys(user)
     const insertRef = this._database.ref(`users/${userKey}/posts`)
     const insertResult = await insertOne(insertRef, post)
     console.log("insertResult", insertResult)
 
-    // await ref.push(post)
-    // console.log('123')
+    return insertResult
   }
 
-  deletePost(postId: string) {
+  async deletePost(userId: string | number, postId: string) {
+    try {
+      const ref = this._database.ref("users")
+      const user = await findOne(ref, { queryType: "id", condition: Number(userId)})
+      const userKey = Object.keys(user)[0]
+  
+      const postRef = this._database.ref(`users/${userKey}/posts`)
     
+  
+      // const postRef = 
+      const deletedPost = await findOne(postRef, { queryType: "id", condition: Number(postId) })
+      if (deletedPost) {
+        const deletedPostKey = Object.keys(deletedPost)[0]
+        const deletePostRef = this._database.ref(`users/${userKey}/posts/${deletedPostKey}`)
+        await deletePostRef.remove()
+        return "success"
+      }
+    } catch(err) {
+      throw new Error(err)
+    }
   }
+
   async getAllPosts(userId: string): Promise<IPost[]> {
     let allPosts = []
     const userRef = this._database.ref("users")
@@ -91,7 +109,7 @@ export class MockPostService implements IPostService {
 
   buildNewPost(req: Request) {
     return {
-      id: `${(Math.random() * 100000000).toFixed(0)}`,
+      id: new Date().getTime(),
       userId: req.user.id,
       username: req.user.username,
       message: req.body.postText,
