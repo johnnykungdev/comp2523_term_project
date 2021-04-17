@@ -4,12 +4,93 @@ import IUser from '../../../interfaces/user.interface'
 import admin from '../../../model/firebase'
 import { findOne, fbObjectToArray, insertOne } from '../../../model/firebase.helper'
 import { DbHelper } from "model/helpers/dbHelper";
+import { database } from "../../../model/fakeDB";
+import { Request } from "express";
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
 export class MockPostService implements IPostService {
   private _database: any
   constructor() {
     this._database = admin.database()
+  }
+
+  private getGroupPosts(user_group): IPost[] {
+    let allPosts: IPost[] = [];
+    for (let user of user_group) {
+      allPosts.push(...user.posts);
+    }
+
+    return allPosts;
+  }
+
+  private getFollowedPosts(username) {
+    const followed_users_names: string[] = DbHelper.select([{ username: username }])[0].following;
+
+    let followed_users: IUser[] = [];
+
+    if (followed_users_names.length != 0) {
+      for (let name of followed_users_names) {
+        let each_followed_user = DbHelper.select([{ username: name }])[0];
+
+        followed_users.push(each_followed_user);
+      }
+
+      return this.getGroupPosts(followed_users);
+    }
+
+    return [];
+  }
+
+  repost(req: Request) {
+    const repost_obj = {
+      poster_username: req.body.username,
+      post_id: req.body.post_id,
+      repostedAt: new Date(),
+    };
+    const current_user = req.user as IUser;
+
+    let reposted_post = DbHelper.recurseSelect([
+      { users: { username: req.body.username } },
+      { posts: { id: req.body.post_id } },
+    ]);
+
+    reposted_post.reposts++;
+
+    // add repost object
+    for (let user of database.users) {
+      if (current_user.username == user.username) {
+        user.reposts.push(repost_obj);
+
+        console.log("repost success");
+        return;
+      }
+    }
+
+    throw new Error("user not found");
+  }
+
+  private getRepostedPosts(username) {
+    console.log("getRepostedPosts " + username);
+
+    const reposts = DbHelper.select([{ username: username }])[0].reposts;
+
+    const post_array: IPost[] = [];
+    //buidling the posts object here
+    for (let r of reposts) {
+      for (let u of database.users) {
+        // match user
+        if (r.poster_username == u.username) {
+          // match post
+          for (let p of u.posts) {
+            if (r.post_id == p.id) {
+              let p_copy = { ...p, createdAt: r.repostedAt, originalDate: p.createdAt };
+              post_array.push(p_copy);
+            }
+          }
+        }
+      }
+    }
+    return post_array;
   }
 
   async addPost(post: IPost, userId: string): Promise<string | any> {
@@ -95,11 +176,15 @@ export class MockPostService implements IPostService {
   }
   findById(id: string): IPost {
     // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+    console.log(id);
+    return DbHelper.findOne({ type: "posts", conditionType: "id", condition: id });
   }
   addCommentToPost(message: { id: string; createdAt: string; userId: string; message: string }, postId: string): void {
     // 🚀 Implement this yourself.
-    throw new Error("Method not implemented.");
+    DbHelper.insertOne(
+      { type: "posts", conditionType: "id", condition: postId },
+      { type: "commentList", newContent: comment }
+    );
   }
 
   sortPosts(posts: IPost[]): IPost[] {
@@ -108,16 +193,32 @@ export class MockPostService implements IPostService {
   }
 
   buildNewPost(req: Request) {
+    const user = req.user as IUser;
     return {
       id: new Date().getTime(),
-      userId: req.user.id,
-      username: req.user.username,
+      userId: user.id,
+      username: user.username,
       message: req.body.postText,
       createdAt: new Date(),
       commentList: [],
       likes: 0,
       reposts: 0,
-      comments: 0
+      comments: 0,
+    };
+  }
+
+  deleteRepost(userId: string, postId: string) {
+    const user = DbHelper.select([{ id: userId }]);
+    const reposts = user[0].reposts;
+    console.log("repossssst");
+    console.log(reposts);
+
+    for (let i = 0; i < reposts.length; i++) {
+      if (reposts[i].post_id == postId) {
+        console.log(i);
+
+        reposts.splice(i, 1);
+      }
     }
   }
 }

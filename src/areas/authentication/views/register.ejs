@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
     <meta name="description" content="" />
-
     <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/iframe.css">
   </head>
   <body class="bg-white font-family-karla h-screen">
     <div class="w-full flex flex-wrap">
@@ -97,8 +97,9 @@
       </div>
 
       <!-- Image Section -->
-      <div class="w-1/2 shadow-2xl">
-        <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0" />
+      <div class="desktop-half shadow-2xl">
+        <!-- <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0" /> -->
+        <iframe class="object-cover w-full h-screen md:block" src="http://localhost:5000/iframe/index" frameborder="0"></iframe>
       </div>
     </div>
   </body>

@@ -12,7 +12,7 @@ const database: IDatabase = {
       username: "billgates",
       posts: [
         {
-          id: "abc1",
+          id: "billgatesabc1",
           userId: "1",
           username: "billgates",
           message: "Microsoft is a great company",
@@ -43,7 +43,7 @@ const database: IDatabase = {
       lastName: "Smith",
       posts: [
         {
-          id: "abc3",
+          id: "james123abc3",
           userId: "james123",
           username: "james123",
           message: "A post by james",
@@ -53,6 +53,7 @@ const database: IDatabase = {
           comments: 12,
           commentList: [
             {
+              username: "james123",
               id: "abc4",
               createdAt: "2012-01-05T04:13:24Z",
               userId: "billgates",
@@ -61,7 +62,7 @@ const database: IDatabase = {
           ],
         },
         {
-          id: "abc5",
+          id: "james123abc5",
           userId: "james123",
 
           username: "james123",
@@ -73,6 +74,7 @@ const database: IDatabase = {
           comments: 12,
           commentList: [
             {
+              username: "james123",
               id: "abc6",
               userId: "billgates",
               createdAt: "2012-02-05T05:13:24Z",
@@ -81,7 +83,7 @@ const database: IDatabase = {
           ],
         },
       ],
-      following: ["1"],
+      following: [],
       reposts: [],
     },
     {
@@ -93,8 +95,9 @@ const database: IDatabase = {
       username: "billbob",
       posts: [
         {
-          id: "abc7",
+          id: "billbobabc7",
           userId: "billbob",
+          username: "billbob",
           message: "Microsoft is a bad company. Do you agree james?",
           createdAt: new Date(),
           likes: 3,
@@ -102,6 +105,7 @@ const database: IDatabase = {
           comments: 0,
           commentList: [
             {
+              username: "billbob",
               id: "abc8",
               createdAt: "2012-01-09T11:25:13Z",
               userId: "billbob",

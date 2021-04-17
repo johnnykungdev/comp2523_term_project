@@ -1,6 +1,8 @@
 import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 import admin from '../../../model/firebase'
+import IUser from "../../../interfaces/user.interface";
+import { Request } from "express";
 
 // ❗️ Implement this class much later, once everything works fine with your mock db
 export class PostService implements IPostService {
@@ -37,17 +39,33 @@ export class PostService implements IPostService {
     throw new Error("Method not implemented.");
   }
 
+  deletePost(userId: string, postId: string) {
+    // 🚀 Implement this yourself.
+    throw new Error("Method not implemented.");
+  }
+
+  repost(req: Request) {
+    // 🚀 Implement this yourself.
+    throw new Error("Method not implemented.");
+  }
+
+  deleteRepost(userId: string, postId: string) {
+    // 🚀 Implement this yourself.
+    throw new Error("Method not implemented.");
+  }
+
   buildNewPost(req: Request) {
+    const user = req.user as IUser;
     return {
       id: `${(Math.random() * 100000000).toFixed(0)}`,
-      userId: req.user.id,
-      username: req.user.username,
+      userId: user.id,
+      username: user.username,
       message: req.body.postText,
       createdAt: new Date(),
       commentList: [],
       likes: 0,
       reposts: 0,
-      comments: 0
-    }
+      comments: 0,
+    };
   }
 }
