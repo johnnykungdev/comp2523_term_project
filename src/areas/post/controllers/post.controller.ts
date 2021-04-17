@@ -49,31 +49,32 @@ class PostController implements IController {
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
   private getPostById = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as IUser;
-    const post = this._postService.findById(req.params.id);
+    const post = await this._postService.findById(req.params.id);
+
     res.render("post/views/post", { post, user });
   };
 
   // 🚀 These post methods needs to be implemented by you
 
   private createComment = async (req: Request, res: Response, next: NextFunction) => {
-    const postId = req.params.id;
-    const user = req.user as IUser;
-
-    function buildComment(userId: string, commentText: string): any {
-      const commentId = (Math.random() * 10000000000).toFixed(0);
-      return {
-        id: `${commentId}`,
-        createdAt: new Date(),
-        userId: userId,
+    try {
+      const postId = req.params.id;
+      const user = req.user as IUser;
+  
+      const newComment = {
+        id: new Date().getTime(),
+        createdAt: String(new Date()),
+        userId: user.id,
         username: user.username,
-        message: commentText,
-      };
+        message: req.body.commentText,
+        postId: Number(postId)
+      }
+  
+      this._postService.addCommentToPost(newComment);
+      res.redirect(`${this.path}/${postId}`);
+    } catch(error) {
+      console.log(error)
     }
-
-    const newComment = buildComment(user.id, req.body.commentText);
-
-    this._postService.addCommentToPost(newComment, postId);
-    res.redirect(`${this.path}/${postId}`);
   };
 
   private createPost = async (req: Request, res: Response, next: NextFunction) => {
@@ -93,9 +94,6 @@ class PostController implements IController {
     } catch(error) {
       throw new Error(error)
     }
-
-    
-    // res.redirect("/posts")
   };
 
   private deleteRepost = async (req: Request, res: Response, next: NextFunction) => {

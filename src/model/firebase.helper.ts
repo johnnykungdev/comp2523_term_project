@@ -15,7 +15,7 @@ function insertOne(ref: any, newObject: any) {
   return new Promise((resolve, reject) => {
     ref.push(newObject, (error) => {
       if (error) {
-        reject(error)
+        reject(error)   
       } else {
         resolve("success")
       }

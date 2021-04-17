@@ -1,9 +1,10 @@
 import IPost from "../../../interfaces/post.interface";
 import IPostService from "./IPostService";
 import IUser from '../../../interfaces/user.interface'
+import IComment from '../../../interfaces/comment.interface'
 import admin from '../../../model/firebase'
 import { findOne, fbObjectToArray, insertOne } from '../../../model/firebase.helper'
-import { DbHelper } from "model/helpers/dbHelper";
+import { DbHelper } from "../../../model/helpers/dbHelper";
 import { database } from "../../../model/fakeDB";
 import { Request } from "express";
 
@@ -132,38 +133,33 @@ export class MockPostService implements IPostService {
   async getAllPosts(userId: string): Promise<IPost[]> {
     let allPosts = []
     const userRef = this._database.ref("users")
-
     let user = await findOne(userRef, { queryType: "id", condition: Number(userId)})
     if (!user) throw new Error("User not found.")
-
     user = user[Object.keys(user)[0]]
-    const userPosts = fbObjectToArray(user.posts)
-    userPosts.forEach(post => {
-      const oldCommentList = post.commentList
-      post.commentList = fbObjectToArray(oldCommentList)
-    })
 
-    userPosts.forEach(post => allPosts.push(post))
+    const postRef = this._database.ref("posts")
 
-    const followedUsers = fbObjectToArray(user.following)
-    const getFollowedUsers = async () => {
-      
-      const followedUsersInfo = await Promise.all(followedUsers.map(async (followedUserId) => {
-        const result = await findOne(userRef, { queryType: "id", condition: followedUserId })
-        const followedUser = result[Object.keys(result)[0]]
-        return followedUser
+    const userPosts = await findOne(postRef, { queryType: "userId", condition: Number(userId)})
+
+   for (let post in userPosts) {
+     allPosts.push(userPosts[post])
+   }
+
+    const  getFollowedPosts = async (allPosts: any[]): Promise<void> => {
+      let followedUsersIds = fbObjectToArray(user.following)
+      const postRef = this._database.ref("posts")
+      const result = await Promise.all(followedUsersIds.map(async (followedUserId) => {
+        let followedUserPosts = await findOne(postRef, {queryType: "userId", condition: followedUserId})
+        if (followedUserPosts) {
+          followedUserPosts = fbObjectToArray(followedUserPosts)
+          return followedUserPosts.forEach(p => allPosts.push(p))
+        } else {
+          return undefined
+        }
       }))
-      return followedUsersInfo
     }
-    const followedUsersObject = await getFollowedUsers()
 
-    followedUsersObject.forEach((followedUser:IUser) : void => {
-      const followedUserPosts = fbObjectToArray(followedUser.posts)
-      followedUserPosts.forEach((userPost: IPost) => {
-        userPost.commentList = fbObjectToArray(userPost.commentList)
-        allPosts.push(userPost)
-      })
-    })
+    await getFollowedPosts(allPosts)
 
     allPosts.sort(function (a: any, b: any) {
       if (new Date(a.createdAt) > new Date(b.createdAt)) {
@@ -172,19 +168,35 @@ export class MockPostService implements IPostService {
         return 1
       }
     })
+
     return allPosts
   }
-  findById(id: string): IPost {
+  
+  async findById(postId: string): Promise<IPost> {
     // 🚀 Implement this yourself.
-    console.log(id);
-    return DbHelper.findOne({ type: "posts", conditionType: "id", condition: id });
+    console.log("postId", postId);
+    const postRef = this._database.ref("posts")
+
+    const result = await findOne(postRef, { queryType: "id", condition: Number(postId)});
+    const post = result[Object.keys(result)[0]]
+    console.log(post);
+    const commentRef = this._database.ref("comments")
+    const postComments = await findOne(commentRef, { queryType: "postId", condition: Number(postId)})
+    let commentList = []
+    if (postComments) {
+      for (let comment in postComments) {
+        commentList.push(postComments[comment])
+      }
+    }
+    post.commentList = commentList
+    console.log(post)
+    return post
   }
-  addCommentToPost(message: { id: string; createdAt: string; userId: string; message: string }, postId: string): void {
+
+  async addCommentToPost(newComment) {
     // 🚀 Implement this yourself.
-    DbHelper.insertOne(
-      { type: "posts", conditionType: "id", condition: postId },
-      { type: "commentList", newContent: comment }
-    );
+    const commentRef = this._database.ref("comments")
+    insertOne(commentRef, newComment)
   }
 
   sortPosts(posts: IPost[]): IPost[] {

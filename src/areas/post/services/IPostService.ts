@@ -1,4 +1,5 @@
 import IPost from "../../../interfaces/post.interface";
+import IComment from "../../../interfaces/comment.interface"
 import { Request } from "express";
 
 
@@ -10,13 +11,12 @@ export default interface IPostService {
 
   getAllPosts(username: string): Promise<IPost[]>;
 
-  findById(id: string): IPost | undefined;
+  findById(userId: string | number, id: string): IPost | undefined;
 
   addCommentToPost(
-    message: { id: string; createdAt: string; userId: string; message: string },
-    postId: string,
+    newComment: IComment
     // userId: string
-  ): IPost | void;
+  ): Promise<IPost> | Promise<void>;
 
   buildNewPost(req: Request): IPost;
   
