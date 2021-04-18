@@ -42,16 +42,20 @@ class PostController implements IController {
 
     const user = req.user as IUser;
     const posts = await this._postService.getAllPosts(user.id);
-    console.log("posts", posts)
     res.render("post/views/posts", { posts, user });
   };
 
   // 🚀 This method should use your postService and pull from your actual fakeDB, not the temporary post object
   private getPostById = async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUser;
-    const post = await this._postService.findById(req.params.id);
+    try {
+      const user = req.user as IUser;
+      const post = await this._postService.findById(req.params.id);
+  
+      res.render("post/views/post", { post, user });
+    } catch(err) {
+      console.log(err)
+    }
 
-    res.render("post/views/post", { post, user });
   };
 
   // 🚀 These post methods needs to be implemented by you
@@ -70,7 +74,7 @@ class PostController implements IController {
         postId: Number(postId)
       }
   
-      this._postService.addCommentToPost(newComment);
+      await this._postService.addCommentToPost(postId, newComment);
       res.redirect(`${this.path}/${postId}`);
     } catch(error) {
       console.log(error)
@@ -78,17 +82,22 @@ class PostController implements IController {
   };
 
   private createPost = async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUser;
-    const newPost: IPost = this._postService.buildNewPost(req);
-    await this._postService.addPost(newPost, user.id)
-    res.redirect("/posts")
+    try {
+      const user = req.user as IUser;
+      const newPost: IPost = this._postService.buildNewPost(req);
+      await this._postService.addPost(newPost, user.id)
+      res.redirect("/posts")
+    } catch(err) {
+      console.log(err)
+    }
   };
 
   private deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as IUser;
     try {
       const deletedPostId = req.body.postToDelete
       console.log("deletePostId", deletedPostId)
-      const userId = req.user.id
+      const userId = user.id
       const result = await this._postService.deletePost(userId, deletedPostId)
       res.redirect("/posts")
     } catch(error) {

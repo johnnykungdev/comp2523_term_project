@@ -141,11 +141,11 @@ export class MockPostService implements IPostService {
 
     const userPosts = await findOne(postRef, { queryType: "userId", condition: Number(userId)})
 
-   for (let post in userPosts) {
-     allPosts.push(userPosts[post])
-   }
+    for (let post in userPosts) {
+      allPosts.push(userPosts[post])
+    }
 
-    const  getFollowedPosts = async (allPosts: any[]): Promise<void> => {
+    const getFollowedPosts = async (allPosts: any[]): Promise<void> => {
       let followedUsersIds = fbObjectToArray(user.following)
       const postRef = this._database.ref("posts")
       const result = await Promise.all(followedUsersIds.map(async (followedUserId) => {
@@ -188,15 +188,45 @@ export class MockPostService implements IPostService {
         commentList.push(postComments[comment])
       }
     }
+    commentList.sort(function(a, b) {
+      if (new Date(a.createdAt) > new Date(b.createdAt)) {
+        return -1
+      } else {
+        return 1
+      }
+    })
+    
     post.commentList = commentList
     console.log(post)
     return post
   }
 
-  async addCommentToPost(newComment) {
+  async addCommentToPost(postId, newComment) {
     // 🚀 Implement this yourself.
-    const commentRef = this._database.ref("comments")
-    insertOne(commentRef, newComment)
+    try {
+      const commentRef = this._database.ref("comments")
+      const postRef = this._database.ref("posts")
+      const post = findOne(postRef, { queryType: "id", condition: Number(postId)})
+      const postKey = Object.keys(post)[0]
+
+      await insertOne(commentRef, {id: newComment.id })
+      const commentResult = await findOne(commentRef, { queryType: "id", condition: Number(newComment.id)})
+      if (commentResult[Object.keys(commentResult)[0]]) {
+        const commentResultKey = Object.keys(commentResult)[0]
+        let currentPost = await findOne(postRef, { queryType: "id", condition: Number(postId) })
+        const currentPostkey = Object.keys(currentPost)[0]
+        currentPost = currentPost[currentPostkey]
+      
+
+        const updates = {}
+        updates[`posts/${currentPostkey}/comments`] = currentPost.comments + 1
+        updates[`comments/${commentResultKey}`] = newComment
+        const ref = this._database.ref()
+        ref.update(updates)
+      }
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   sortPosts(posts: IPost[]): IPost[] {

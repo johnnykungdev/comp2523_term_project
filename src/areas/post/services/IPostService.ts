@@ -11,9 +11,10 @@ export default interface IPostService {
 
   getAllPosts(username: string): Promise<IPost[]>;
 
-  findById(userId: string | number, id: string): IPost | undefined;
+  findById(postId: string | number): IPost | undefined;
 
   addCommentToPost(
+    postId: string | number,
     newComment: IComment
     // userId: string
   ): Promise<IPost> | Promise<void>;
