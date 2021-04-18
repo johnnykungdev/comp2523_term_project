@@ -37,7 +37,8 @@ I worked on the following tasks:
 2. <Completed displaying Posts> - Displaying posts at /posts page
 3. <refactored ejs> - to use partials at "src/areas/_ejs_partials"
 4. <db integration> - With Mongodb and MySQL(Used sequelizer). Located on branch "sean" (see https://github.com/kjohnathan/comp2523_term_project/blob/sean/README.md)
-5. <Completed the Repost feature> - The retweet feature started off by Sara
-6. <front-page demo> - iframe on login and register page
-7. <researched websocket> - tried to use websocket for notification, but failed as I realized that connection won't persist across multiple pages application.
+    - SOLID principle of polymorphism demonstrated to allow switching of databases.
+6. <Completed the Repost feature> - The retweet feature started off by Sara
+7. <front-page demo> - iframe on login and register page
+8. <researched websocket> - tried to use websocket for notification, but failed as I realized that connection won't persist across multiple pages application.
 
